@@ -1,0 +1,47 @@
+BLANK UNDO
+DRAW LEVEL ALL
+EDIT MODEL ALL SELECT ALL
+//change it if You have not such a directory: C:\Temp , or create it.
+STRING tempfile = "C:\temp\macrotemp.tmp"
+DELETE FILE $tempfile
+DIALOGS MESSAGE OFF
+ECHO OFF DCPDEBUG UNTRACE COMMAND ACCEPT
+TRACEFILE OPEN $tempfile
+SIZE MODEL
+TRACEFILE CLOSE
+DIALOGS ERROR OFF
+FILE CLOSE infile
+DIALOGS MESSAGE ON
+DIALOGS ERROR On
+STRING LIST tempfilecontent = {}
+FILE OPEN $tempfile FOR READ AS infile
+FILE READ $tempfilecontent FROM infile
+FILE CLOSE infile 
+BOOL feluletek = 0
+STRING LIST id_lista = {}
+BOOL find_component = FALSE
+FOREACH line IN $tempfilecontent {
+	// Component       Level             Type                   Red    Green     Blue        
+	// xt1_7572        0                 Surface                255        0        0
+	IF $find_component {
+		STRING rgb =""
+		IF size(tokens($line)) == 8 {
+			$rgb = tokens($line)[4] + "," + tokens($line)[5] + "," + tokens($line)[6]
+		} ELSE {
+			$rgb = tokens($line)[5] + "," + tokens($line)[6] + "," + tokens($line)[7]
+		}
+		IF NOT $ENTITY_EXISTS('level', $rgb) {
+			CREATE LEVEL ; LEVEL
+			RENAME LEVEL # $rgb
+			EDIT SELECTION MODEL CLEAR EDIT SELECTION MODEL FILTER $rgb
+			EDIT LEVEL # ACQUIRE SELECTED
+		}
+		UNDRAW Level $rgb
+		
+	} ELSE {
+	//If using different language then english, change the 'Component' and 'Blue' words
+		IF position($line, 'Component') != -1 AND position($line, 'Blue') != -1 {
+			$find_component = TRUE
+		}
+	}
+}

@@ -1,0 +1,922 @@
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY 'My-Strategies' NEW
+STRATEGYSELECTOR STRATEGY "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/Rough.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/ROUGH-D50.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/ROUGH-D50.ptf"
+
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "CUTTER D 40"
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWLimit
+CREATE BOUNDARY ; BLOCK FORM BOUNDARY
+EDIT BOUNDARY "2" PRIVATE NO
+EDIT BOUNDARY "2" CALCULATE
+EDIT BOUNDARY "2" ACCEPT BOUNDARY ACCEPT
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWSEPtSPoint
+EDIT TPPAGE SWLeadFeedRate
+EDIT TPPAGE SWFeedSpeed
+EDIT TPPAGE SWApproach
+EDIT TPPAGE SWOrderBasic
+EDIT TPPAGE SWHighSpeedAClr
+EDIT TPPAGE SWAreaFilterAClear
+EDIT TPPAGE SWAreaFlatAClear
+EDIT TPPAGE SWAreaFilterAClear
+EDIT TOOLPATH "1" CALCULATE
+FORM ACCEPT SFAreaClearance
+CREATE STOCKMODEL ; FORM STOCKMODEL
+EDIT STOCKMODEL "1" REAPPLYFROMGUI
+EXPLORER SELECT StockModel "StockModel\1" NEW
+EDIT STOCKMODEL "1" BLOCK ;
+EDIT STOCKMODEL "1" CALCULATE_STATE INDEXED_STATE 0
+EXPLORER SELECT Toolpath "Toolpath\1" NEW
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "1" LAST
+EDIT STOCKMODEL "1" CALCULATE_STATE INDEXED_STATE 1
+EXPLORER SELECT Toolpath "Toolpath\1" NEW
+DRAW Toolpath "1"
+EXPLORER SELECT Toolpath "Toolpath\1" NEW
+UNDRAW Toolpath "1"
+COPY TOOLPATH "1"
+EXPLORER SELECT Toolpath "Toolpath\1_1" NEW
+ACTIVATE TOOLPATH "1_1"
+ACTIVATE TOOLPATH "1_1" FORM TOOLPATH
+EDIT TOOLPATH "1_1" RECYCLE
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "CUTTER D 20"
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "14"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishAreaClr
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "3"
+EDIT TOOLPATH "1_1" CALCULATE
+EDIT TOOLPATH "1_1" RECYCLE
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'AreaClearance.Rest.Active' '1'
+EDIT TPPAGE SWRest
+EDIT PAR 'AreaClearance.Rest.ReferenceType' 'stockmodel'
+EDIT PAR 'StockModelState.StockModel' "1"
+EDIT TOOLPATH "1_1" CALCULATE
+OLE FILEACTION "open" "C:/Users/dcard/OneDrive/Desktop/Macros/MACRO_ROUGH_O3_TOOLS.mac"
+FORM ACCEPT SFAreaClearance
+EXPLORER SELECT StockModel "StockModel\1" NEW
+UNDRAW StockModel "1"
+EXPLORER SELECT StockModel "StockModel\1" NEW
+DRAW StockModel "1"
+EXPLORER SELECT StockModel "StockModel\1" NEW
+UNDRAW StockModel "1"
+EXPLORER SELECT Toolpath "Toolpath\1_1" NEW
+ACTIVATE TOOLPATH "1_1" FORM TOOLPATH
+EDIT TOOLPATH "1_1" RECYCLE
+EDIT TPPAGE TOOL
+FORM CANCEL SFAreaClearance
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "1_1" LAST
+EDIT STOCKMODEL "1" CALCULATE_STATE INDEXED_STATE 2
+EXPLORER SELECT Toolpath "Toolpath\1_1" NEW
+ACTIVATE TOOLPATH "1_1" FORM TOOLPATH
+EDIT TOOLPATH "1_1" CLONE
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "ENDMILLR D10"
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWRest
+EDIT STOCKMODEL '1' ACTIVATE INDEXED_STATE '2' 
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "7"
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishAreaClr
+EDIT TPPAGE SWAreaFlatAClear
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "6"
+EDIT TOOLPATH "1_1_1" CALCULATE
+EDIT TOOLPATH "1_1_1" RECYCLE
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishAreaClr
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "7"
+EDIT TOOLPATH "1_1_1" CALCULATE
+FORM ACCEPT SFAreaClearance
+EXPLORER SELECT Toolpath "Toolpath\1_1" NEW
+DRAW Toolpath "1_1"
+EXPLORER SELECT Toolpath "Toolpath\1_1" NEW
+UNDRAW Toolpath "1_1"
+EXPLORER SELECT FOLDER "Tool\Cutter" NEW
+EXPLORER SELECT FOLDER "Tool\Endmill-Radius" NEW
+EXPLORER SELECT FOLDER "Tool\Cutter" NEW
+EXPLORER SELECT Tool "Tool\Cutter\CUTTER D 16" NEW
+ACTIVATE TOOL "CUTTER D 16"
+STRING Msg = " Please create Shallow form boundary"
+CREATE BOUNDARY ; SHALLOW FORM BOUNDARY
+EDIT BOUNDARY "1" PRIVATE NO
+EDIT BOUNDARY "1" CALCULATE
+EDIT BOUNDARY "1" ACCEPT BOUNDARY ACCEPT
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY
+ 'My-Strategies' NEW
+STRATEGYSELECTOR STRATEGY "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/Semi-Contour.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/Semi-Contour.ptf"
+
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWConstZFinishing
+EDIT TPPAGE SWToolRapidMv
+EDIT TOOLPATH "1" CALCULATE
+EDIT TOOLPATH "2" CALCULATE
+FORM ACCEPT SFConstZFinishing
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+ACTIVATE TOOLPATH "2" FORM TOOLPATH
+EDIT TOOLPATH "2" RECYCLE
+EDIT TPPAGE SWHighSpeed
+EDIT TPPAGE SWAutoVerifBasic
+EDIT TPPAGE SWAreaFilter
+EDIT PAR 'UnsafeSegmentRemoval.Active' '1'
+EDIT PAR 'UnsafeSegmentRemoval.Threshold' "5"
+EDIT TOOLPATH "2" CALCULATE
+FORM ACCEPT SFConstZFinishing
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY 'Feature-Machining' NEW
+STRATEGYSELECTOR CATEGORY 'Finishing' NEW
+STRATEGYSELECTOR STRATEGY "Finishing/Constant-Z-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Offset-Flat-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Flowline-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Embedded-Pattern-Finishing.ptf" NEW
+
+STRATEGYSELECTOR CATEGORY 'My-Strategies' NEW
+STRATEGYSELECTOR CATEGORY 'Blisks' NEW
+STRATEGYSELECTOR CATEGORY 'Drilling-Methods' NEW
+STRATEGYSELECTOR CATEGORY 'Feature-Machining' NEW
+STRATEGYSELECTOR CATEGORY 'Curve-Machining' NEW
+STRATEGYSELECTOR CATEGORY '3D-Area-Clearance' NEW
+STRATEGYSELECTOR CATEGORY 'Feature-Machining' NEW
+STRATEGYSELECTOR CATEGORY 'Finishing' NEW
+STRATEGYSELECTOR STRATEGY "Finishing/3D-Offset-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/3D-Offset-Finishing.ptf"
+
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT PAR 'BoundaryLimit.Keep' 'inside'
+EDIT TPPAGE SWOffsetFinThreeD
+EDIT TPPAGE SWAutoVerifBasic
+EDIT TPPAGE SWToolAxis
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWToolAxis
+EDIT TPPAGE SWToolAxOVec
+EDIT TPPAGE SWToolRapidMv
+EDIT TPPAGE SWToolRapidMvClear
+EDIT TPPAGE SWLeadsLinks
+EDIT TPPAGE SWToolRapidMvClear
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWStockEngage
+EDIT TPPAGE SWOffsetFinThreeD
+EDIT TPPAGE SWAutoVerifBasic
+EDIT TPPAGE SWPointDistrb
+EDIT TOOLPATH "3" CALCULATE
+FORM ACCEPT SFOffsetFinThreeD
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY 'Finishing' NEW
+STRATEGYSELECTOR STRATEGY "Finishing/Raster-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Pattern-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Raster-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Rotary-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Raster-Flat-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Raster-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Raster-Flat-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Projection-Surface-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Profile-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Offset-Flat-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/Offset-Flat-Finishing.ptf"
+
+EDIT TOOLPATH "4" CALCULATE
+EDIT TOOLPATH "4" RECYCLE
+EDIT TPPAGE SWRest
+EDIT PAR 'AreaClearance.Rest.ReferenceType' 'toolpath'
+EDIT TPPAGE SWOffsetFinFlat
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+ACTIVATE BOUNDARY " "
+EDIT TPPAGE SWOffsetFinFlat
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetFinFlat
+EDIT PAR 'AreaClearance.Slicer.Flat.HoleFilterThreshold.Active' '1'
+EDIT PAR 'AreaClearance.Slicer.Flat.HoleFilterThreshold.Value' "5"
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetFinFlat
+EDIT TOOLPATH "4" CALCULATE
+EDIT TOOLPATH "4" CALCULATE
+EDIT TOOLPATH "4" CALCULATE
+EDIT PAR 'AreaClearance.Slicer.Flat.MultipleCuts.FinalStepdown.Active' '1'
+EDIT PAR 'AreaClearance.Slicer.Flat.MultipleCuts.FinalStepdown.Active' '0'
+EDIT TPPAGE SWToolAxOVec
+EDIT TPPAGE SWToolRapidMv
+EDIT TPPAGE SWOffsetFinFlat
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' Edit Par 'Stepover' "8"
+EDIT TOOLPATH "4" CALCULATE
+EDIT TOOLPATH "4" CALCULATE
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWOffsetFinFlat
+EDIT PAR 'AreaClearance.Rest.Active' '0'
+EDIT TOOLPATH "4" CALCULATE
+FORM ACCEPT SFOffsetFinFlat
+EXPLORER SELECT Toolpath "Toolpath\3" NEW
+DRAW Toolpath "3"
+EXPLORER SELECT Toolpath "Toolpath\3" NEW
+UNDRAW Toolpath "3"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+EDIT STATISTICS TOOLPATH "4" FORM STATISTICS
+FORM CANCEL STATISTICS
+EXPLORER SELECT Toolpath "Toolpath\3" NEW
+ACTIVATE TOOLPATH "3"
+EDIT STATISTICS TOOLPATH "3" FORM STATISTICS
+FORM CANCEL STATISTICS
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+DRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+UNDRAW Toolpath "4"
+ACTIVATE TOOLPATH "4"
+EXPLORER SELECT Toolpath "Toolpath\3" NEW
+ACTIVATE TOOLPATH "3"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+ACTIVATE TOOLPATH "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+DRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+UNDRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+DRAW Toolpath "2"
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+UNDRAW Toolpath "2"
+EXPLORER SELECT Toolpath "Toolpath\3" NEW
+ACTIVATE TOOLPATH "3"
+PICK -621.781 -495.406 621.781 495.406 15.2085 -24.3308 19.7687 0.136426 -0.686419 0.714294 0.175359 0.726382 0.664543 0 -170.384 279.802 -170.384 279.802
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+DRAW Toolpath "2"
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+UNDRAW Toolpath "2"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+DRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+UNDRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+DRAW Toolpath "4"
+EXPLORER SELECT Toolpath "Toolpath\4" NEW
+UNDRAW Toolpath "4"
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Finishing/3D-Offset-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/3D-Offset-Finishing.ptf"
+
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWStockEngage
+EDIT TPPAGE SWOffsetFinThreeD
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWStockEngage
+EDIT PAR 'StockEngagement.MachineStockOnly' 1
+EXPLORER SELECT Toolpath "Toolpath\2" NEW
+EXPLORER SELECT Toolpath "Toolpath\4" SERIES
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "2" LAST
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "3" LAST
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "4" LAST
+EDIT STOCKMODEL "1" CALCULATE_STATE INDEXED_STATE 5
+EDIT TPPAGE SWLimit
+EDIT TOOLPATH "5" CALCULATE
+EDIT TOOLPATH "5" RECYCLE
+EDIT PAR 'BoundaryLimit.Keep' 'outside'
+EDIT TOOLPATH "5" CALCULATE
+FORM ACCEPT SFOffsetFinThreeD
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY 'Finishing' NEW
+STRATEGYSELECTOR STRATEGY "Finishing/Steep-and-Shallow-Finishing.002.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/Steep-and-Shallow-Finishing.002.ptf"
+
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "ENDMILLR D10"
+EDIT TPPAGE SWConstZSShallow
+EDIT PAR 'Spiral' 1
+EDIT PAR 'ShallowSpiral' 1
+EDIT TOOLPATH "6" CALCULATE
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWLimit
+EDIT TOOLPATH "6" RECYCLE
+EDIT PAR 'BoundaryLimit.Keep' 'inside'
+ACTIVATE BOUNDARY " "
+EDIT TOOLPATH "6" CALCULATE
+FORM ACCEPT SFConstZSShallow
+PICK -824.509 -656.93 824.509 656.93 38.2667 -85.8866 27.0757 -0.390675 -0.726652 0.56511 0.291824 0.484466 0.824701 0 -699.226 297.144 -699.226 297.144
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Finishing/Constant-Z-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/3D-Offset-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Corner-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Constant-Z-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Corner-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Corner-Multi--pencil-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Disc-Profile-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Embedded-Pattern-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Flowline-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Optimised-Constant-Z-Finishing.002.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Offset-Flat-Finishing.ptf" NEW
+
+STRATEGYSELECTOR STRATEGY "Finishing/Optimised-Constant-Z-Finishing.002.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/Optimised-Constant-Z-Finishing.002.ptf"
+
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWConstZOptimized
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' Edit Par 'Stepover' ".5"
+EDIT TOOLPATH "7" CALCULATE
+EDIT TOOLPATH "7" RECYCLE
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWConstZOptimized
+EDIT TPPAGE SWHighSpeed
+EDIT TPPAGE SWConstZOptimized
+EDIT TPPAGE SWStockEngage
+EDIT PAR 'StockEngagement.MachineStockOnly' 0
+EDIT TPPAGE SWHighSpeed
+EDIT TPPAGE SWStockEngage
+EDIT TPPAGE SWConstZOptimized
+EDIT TPPAGE SWHighSpeed
+EDIT TPPAGE SWAutoVerifBasic
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWToolAxis
+EDIT TPPAGE SWToolAxOVec
+EDIT TPPAGE SWStockEngage
+EDIT TOOLPATH "7" CALCULATE
+FORM ACCEPT SFConstZOptimized
+OLE FILEACTION "open" "C:/Users/dcard/OneDrive/Desktop/Macros/Macro-Semi-Finish-Mold.mac"
+MACRO FILESELECTOR
+FORM RIBBON BACKSTAGE CLOSE RESET ALL
+
+STRING $tName = "10 FLAT"
+	CREATE TOOL $tName ENDMILL
+	EDIT TOOL $tName DIAMETER "10"
+	EDIT TOOL $tName LENGTH "50"
+STRING $tpName = FOLDER("Toolpath")[SIZE(FOLDER("Toolpath"))-1].Name
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "3D-Area-Clearance/Model-Rest-Area-Clearance.002.ptf"
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $tName
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'Strategy' 'offset_area_clear' EDIT PAR 'AreaClearance.Offset.Type' 'all'
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+EDIT PAR 'CutDirection' 'any'
+EDIT PAR 'Thickness' ".1"
+EDIT PAR 'UseAxialThickness' '1'
+EDIT PAR 'AxialThickness' "0.05"
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "7"
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN ".15"
+EDIT TPPAGE SWRest
+EDIT PAR 'AreaClearance.Rest.ReferenceType' 'toolpath'
+EDIT PAR 'AreaClearance.Rest.Toolpath' '$tpName'
+//EDIT PAR 'AreaClearance.Rest.Toolpath' "O5001_16 R0,8 RGH"
+EDIT PAR 'AreaClearance.Rest.ThresholdThickness' ".1"
+EDIT PAR 'AreaClearance.Rest.ExpandArea' "1"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWAreaFlatAClear
+EDIT PAR 'AreaClearance.ZHeights.Flats' 'level'
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWLeadsLinks
+EDIT TPPAGE SWLeadIn
+FORM PMLLEADINRAMP EDIT TOOLPATH LEADS RAMPPAGE LEADINRAMPOPT1
+EDIT TOOLPATH LEADS LEADIN RAMPOPT ZIGANGLE "2"
+EDIT TOOLPATH LEADS LEADIN RAMPOPT HEIGHT_INCREMENT ".5"
+LEADINRAMP ACCEPT
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'straight'
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'skim'
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "2000.0"
+EDIT FRATE "1500.0"
+EDIT PRATE "1000"
+EDIT RSPEED "8000.0"
+EDIT COOLANT NONE
+EDIT TPPAGE SWSEPtSPoint
+RENAME TOOLPATH "#" "10 FLAT REST"
+EDIT TOOLPATH "10 FLAT REST" CALCULATE
+PROJECT RESET
+No
+EDIT PAR 'SimulationState.ToolControl.OrientationVector.Mode' 'as_set_on_toolpath'
+EDIT PAR 'SimulationState.ToolControl.ToolAxisConstraint.Mode' 'unconstrained'
+SIMULATE JOG RTCP NONE
+SIMULATE TOOLWP NODRAW
+DRAW MACHINETOOL ;
+PROJECT OPEN "C:/Users/dcard/OneDrive/Desktop/powermill files/PowerMILL Training Data/Projects/PowerMILL Projects 3 axis/SurfaceFinishing-Start"
+MACRO FILESELECTOR
+	MESSAGE WARN "The 'duplicated' folder does not exist"
+CREATE FOLDER "Toolpath" ; 
+PICK -611.638 -487.325 611.638 487.325 -204.885 24.0947 79.4309 -0.14347 -0.902102 0.406974 0.363718 0.334385 0.869423 0 -430.53 59.178 -430.53 59.178
+MACRO FILESELECTOR
+	MESSAGE WARN "The 'duplicated' folder does not exist"
+EXPLORER SELECT FOLDER "Toolpath\Folder1" NEW
+CREATE FOLDER "Toolpath" ; 
+PICK -611.638 -487.325 611.638 487.325 -204.885 24.0947 79.4309 -0.14347 -0.902102 0.406974 0.363718 0.334385 0.869423 0 -484.544 94.923 -485.339 90.9514
+MACRO FILESELECTOR
+	MESSAGE WARN "The 'duplicated' folder does not exist"
+MACRO FILESELECTOR
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "duplicated"
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving"
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+MACRO FILESELECTOR
+ //    MACRO   PARA CRIAR PASTA E MOVER  PROGRAMAS
+
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving"
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\Folder1" NEW
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\Folder2" NEW
+DELETE TOOLPATH FOLDER "Toolpath\Folder2"
+EXPLORER SELECT FOLDER "Toolpath\Folder1" NEW
+DELETE TOOLPATH FOLDER "Toolpath\Folder1"
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+PICK -611.638 -487.325 611.638 487.325 -204.885 24.0947 79.4309 -0.14347 -0.902102 0.406974 0.363718 0.334385 0.869423 0 -456.743 334.812 -455.154 334.812
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+EXPLORER SELECT FOLDER "Toolpath\duplicated" NEW
+DELETE TOOLPATH FOLDER "Toolpath\duplicated"
+SPLITTER TABRECYCLER
+EDIT RECYCLER RECOVER Toolpath "FinPkt-a1"
+EDIT RECYCLER RECOVER Toolpath "FinPkt-a1_1"
+EDIT RECYCLER RECOVER Toolpath "FinPkt-a1_1_1"
+EDIT RECYCLER RECOVER Toolpath "1"
+MACRO FILESELECTOR
+ //    MACRO   PARA CRIAR PASTA E MOVER  PROGRAMAS
+
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Rough"
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving"
+EDIT FOLDER  "Toolpath\duplicated" INSERT $tp LAST
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+DELETE TOOLPATH FOLDER "Toolpath\Rough"
+MACRO FILESELECTOR
+ //    MACRO   PARA CRIAR PASTA E MOVER  PROGRAMAS
+
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Rough"
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving"
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DRAW Tool "D10T1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+UNDRAW Tool "D10T1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DELETE Tool "D10T1"
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+EXPLORER SELECT Toolpath "Toolpath\Rough\FinPkt-a1" NEW
+DELETE Toolpath "FinPkt-a1"
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+EXPLORER SELECT Toolpath "Toolpath\Rough\FinPkt-a1_1" NEW
+DELETE Toolpath "FinPkt-a1_1"
+DELETE Toolpath "FinPkt-a1_1_1"
+DELETE Toolpath "1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DELETE Tool "D10T1"
+EXPLORER SELECT FOLDER "Toolpath\Rough" NEW
+DELETE TOOLPATH FOLDER "Toolpath\Rough"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DELETE TOOL "D10T1"
+EXPLORER SELECT Pattern "Pattern\lower" NEW
+DELETE Pattern "lower"
+DELETE Pattern "upper"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DELETE Tool "D10T1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+SPLITTER TABRECYCLER
+SPLITTER TABEXPLORE
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+UNLOCK TOOL "D10T1"
+DELETE TOOL "D10T1"
+UNLOCK TOOL "D10T1"
+DELETE Tool "D10T1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+EXPLORER SELECT Boundary "Boundary\1" NEW
+DELETE Boundary "1"
+EXPLORER SELECT Tool "Tool\D10T1" NEW
+DELETE Tool "D10T1"
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+    //MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+// Create a list of the tools and check that at least 1 was selected.
+ENTITY LIST $tl = explorer_selected_entities()
+
+    MESSAGE ERROR "No tools selected, please select tools and re-run the macro."
+
+STRING ARRAY material[] = {"A36-(P)", "1045-(P)", "4140-(P)", "4340-(P)", "SS-303-(M)", "SS-304-(M)", "SS-316-(M)", "SS-400 Series-(M)", "SS-17-4PH-(M)", "Al-6061-(N)", "Al-7075-(N)", "Inconel-(S)", "Titanium-(S)"}
+INT C = INPUT CHOICE $material "What Material are you Machining?"
+
+REAL $SPEED = "0"
+REAL $FPR = "0"
+
+string list $types = {'Finishing', 'Roughing'}
+int $feedspeedIndexType = INPUT choice $types "Select Type"
+string $type = lcase($types[$feedspeedIndexType])
+PRINT $type
+
+string list $operations = {'General', 'Slotting', 'Profiling', 'Face Milling', 'Drilling', 'Plunge Milling', 'Copy Milling' }
+int $feedspeedIndex = INPUT choice $operations "Select Operation"
+string $operation = lcase($operations[$feedspeedIndex])
+PRINT $operation
+
+STRING list $Coolanttypes = {'Standard', 'Flood', 'Mist', 'Tap', 'Air', 'Thru', 'Both', 'None'}
+int $index = INPUT CHOICE $Coolanttypes "Select Coolant"
+string $Coolanttype = lcase($Coolanttypes[$index])
+PRINT $Coolanttype
+
+string list $toolmatls = {'Carbide', 'Hss'}
+int $toolmatlsTypeindex = INPUT choice $toolmatls "Select Tool Material"
+string $toolmatl = lcase($toolmatls[$toolmatlsTypeindex])
+PRINT $toolmatl
+
+
+MESSAGE INFO "All tool cutting data has been entered for selected tools! "
+GRAPHICS UNLOCK
+DIALOGS MESSAGE ON
+DIALOGS ERROR ON
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+ACTIVATE TOOL "CUTTER D 50"
+FORM FEEDRATE
+FORM ACCEPT FEEDRATE
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+    //MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+// Create a list of the tools and check that at least 1 was selected.
+ENTITY LIST $tl = explorer_selected_entities()
+
+    MESSAGE ERROR "No tools selected, please select tools and re-run the macro."
+
+STRING ARRAY material[] = {"A36-(P)", "1045-(P)", "4140-(P)", "4340-(P)", "SS-303-(M)", "SS-304-(M)", "SS-316-(M)", "SS-400 Series-(M)", "SS-17-4PH-(M)", "Al-6061-(N)", "Al-7075-(N)", "Inconel-(S)", "Titanium-(S)"}
+INT C = INPUT CHOICE $material "What Material are you Machining?"
+
+REAL $SPEED = "0"
+REAL $FPR = "0"
+
+string list $types = {'Finishing', 'Roughing'}
+int $feedspeedIndexType = INPUT choice $types "Select Type"
+string $type = lcase($types[$feedspeedIndexType])
+PRINT $type
+
+string list $operations = {'General', 'Slotting', 'Profiling', 'Face Milling', 'Drilling', 'Plunge Milling', 'Copy Milling' }
+int $feedspeedIndex = INPUT choice $operations "Select Operation"
+string $operation = lcase($operations[$feedspeedIndex])
+PRINT $operation
+
+STRING list $Coolanttypes = {'Standard', 'Flood', 'Mist', 'Tap', 'Air', 'Thru', 'Both', 'None'}
+int $index = INPUT CHOICE $Coolanttypes "Select Coolant"
+string $Coolanttype = lcase($Coolanttypes[$index])
+PRINT $Coolanttype
+
+string list $toolmatls = {'Carbide', 'Hss'}
+int $toolmatlsTypeindex = INPUT choice $toolmatls "Select Tool Material"
+string $toolmatl = lcase($toolmatls[$toolmatlsTypeindex])
+PRINT $toolmatl
+
+
+MESSAGE INFO "All tool cutting data has been entered for selected tools! "
+GRAPHICS UNLOCK
+DIALOGS MESSAGE ON
+DIALOGS ERROR ON
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+ACTIVATE TOOL "CUTTER D 50"
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+    //MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+// Create a list of the tools and check that at least 1 was selected.
+ENTITY LIST $tl = explorer_selected_entities()
+
+    MESSAGE ERROR "No tools selected, please select tools and re-run the macro."
+
+STRING ARRAY material[] = {"A36-(P)", "1045-(P)", "4140-(P)", "4340-(P)", "SS-303-(M)", "SS-304-(M)", "SS-316-(M)", "SS-400 Series-(M)", "SS-17-4PH-(M)", "Al-6061-(N)", "Al-7075-(N)", "Inconel-(S)", "Titanium-(S)"}
+INT C = INPUT CHOICE $material "What Material are you Machining?"
+
+REAL $SPEED = "0"
+REAL $FPR = "0"
+
+string list $types = {'Finishing', 'Roughing'}
+int $feedspeedIndexType = INPUT choice $types "Select Type"
+string $type = lcase($types[$feedspeedIndexType])
+PRINT $type
+
+string list $operations = {'General', 'Slotting', 'Profiling', 'Face Milling', 'Drilling', 'Plunge Milling', 'Copy Milling' }
+int $feedspeedIndex = INPUT choice $operations "Select Operation"
+string $operation = lcase($operations[$feedspeedIndex])
+PRINT $operation
+
+STRING list $Coolanttypes = {'Standard', 'Flood', 'Mist', 'Tap', 'Air', 'Thru', 'Both', 'None'}
+int $index = INPUT CHOICE $Coolanttypes "Select Coolant"
+string $Coolanttype = lcase($Coolanttypes[$index])
+PRINT $Coolanttype
+
+string list $toolmatls = {'Carbide', 'Hss'}
+int $toolmatlsTypeindex = INPUT choice $toolmatls "Select Tool Material"
+string $toolmatl = lcase($toolmatls[$toolmatlsTypeindex])
+PRINT $toolmatl
+
+
+MESSAGE INFO "All tool cutting data has been entered for selected tools! "
+GRAPHICS UNLOCK
+DIALOGS MESSAGE ON
+DIALOGS ERROR ON
+FORM FEEDRATE
+FORM ACCEPT FEEDRATE
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+DRAW Tool "CUTTER D 50"
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+UNDRAW Tool "CUTTER D 50"
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+ACTIVATE FOLDER "Tool\Facemill"
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+PICK -764.547 -609.156 764.547 609.156 -83.4823 -10.9619 44.5221 -0.14347 -0.902102 0.406974 0.363718 0.334385 0.869423 0 -295.89 187.165 -295.89 187.165
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+    //MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+// Create a list of the tools and check that at least 1 was selected.
+ENTITY LIST $tl = explorer_selected_entities()
+
+    MESSAGE ERROR "No tools selected, please select tools and re-run the macro."
+
+STRING ARRAY material[] = {"A36-(P)", "1045-(P)", "4140-(P)", "4340-(P)", "SS-303-(M)", "SS-304-(M)", "SS-316-(M)", "SS-400 Series-(M)", "SS-17-4PH-(M)", "Al-6061-(N)", "Al-7075-(N)", "Inconel-(S)", "Titanium-(S)"}
+INT C = INPUT CHOICE $material "What Material are you Machining?"
+QUIT
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 63" NEW
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 100" NEW
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+    //MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+// Create a list of the tools and check that at least 1 was selected.
+ENTITY LIST $tl = explorer_selected_entities()
+
+    MESSAGE ERROR "No tools selected, please select tools and re-run the macro."
+
+STRING ARRAY material[] = {"A36-(P)", "1045-(P)", "4140-(P)", "4340-(P)", "SS-303-(M)", "SS-304-(M)", "SS-316-(M)", "SS-400 Series-(M)", "SS-17-4PH-(M)", "Al-6061-(N)", "Al-7075-(N)", "Inconel-(S)", "Titanium-(S)"}
+INT C = INPUT CHOICE $material "What Material are you Machining?"
+QUIT
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+ACTIVATE TOOL "CUTTER D 50"
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 50" NEW
+EXPLORER SELECT Tool "Tool\Facemill\CUTTER D 100" SERIES
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT FOLDER "Tool\Facemill" NEW
+RENAME FOLDER "Tool\Facemill" "tool"
+PICK -764.547 -609.156 764.547 609.156 -83.4823 -10.9619 44.5221 -0.14347 -0.902102 0.406974 0.363718 0.334385 0.869423 0 -632.489 142.484 -632.489 142.484
+EXPLORER SELECT FOLDER "Tool\tool" NEW
+EXPLORER SELECT Tool "Tool\tool\CUTTER D 50" NEW
+EXPLORER SELECT Tool "Tool\tool\CUTTER D 100" SERIES
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT Tool "Tool\tool\CUTTER D 50" NEW
+RENAME Tool "CUTTER D 50" "tool"
+EXPLORER SELECT Tool "Tool\tool\CUTTER D 100" NEW
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+ACTIVATE TOOL "tool"
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+    MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+EXPLORER SELECT FOLDER "Tool\tool" NEW
+DEACTIVATE FOLDER
+MACRO FILESELECTOR
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+GRAPHICS LOCK
+DEACTIVATE TOOL
+
+//if size(explorer_selected_entities()) <= 0 or explorer_selected_entities()[0].RootType != 'tool' {
+   // MESSAGE ERROR "Only tools can be selected, please select tools and rerun the macro."
+   // return
+//}
+
+MACRO FILESELECTOR
+    DIALOGS MESSAGE OFF
+    DIALOGS ERROR OFF
+    GRAPHICS LOCK
+    DEACTIVATE TOOL
+    //reset localvars
+        MESSAGE ERROR "ERROR! No Tools have be selected, please select Tools!"
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+MACRO FILESELECTOR
+    DIALOGS MESSAGE OFF
+    DIALOGS ERROR OFF
+    GRAPHICS LOCK
+    DEACTIVATE TOOL
+    //reset localvars
+        MESSAGE ERROR "ERROR! No Tools have be selected, please select Tools!"
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+ACTIVATE TOOL "tool"
+MACRO FILESELECTOR
+    DIALOGS MESSAGE OFF
+    DIALOGS ERROR OFF
+    GRAPHICS LOCK
+    DEACTIVATE TOOL
+    //reset localvars
+        MESSAGE ERROR "ERROR! No Tools have be selected, please select Tools!"
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+EXPLORER SELECT FOLDER "Tool\tool" NEW
+RENAME FOLDER "Tool\tool" "tool"
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+FORM TOOLDBSEARCH
+TOOLDB RESULTS_LIST SELECT 27 NEW
+TOOLDB RESULTS_LIST CREATE SELECTED
+TOOLDBSEARCH ACCEPT
+MACRO FILESELECTOR
+    DIALOGS MESSAGE OFF
+    DIALOGS ERROR OFF
+    GRAPHICS LOCK
+    DEACTIVATE TOOL
+    //reset localvars
+        MESSAGE ERROR "ERROR! No Tools have be selected, please select Tools!"
+MACRO FILESELECTOR
+
+	reset localvars
+	DIALOGS MESSAGE OFF
+	DIALOGS ERROR OFF
+	GRAPHICS LOCK
+	
+EXPLORER SELECT Tool "Tool\ENDMILL D4_1" NEW
+EXPLORER SELECT Tool "Tool\tool\tool" NEW
+EXPLORER SELECT Tool "Tool\tool\CUTTER D 63" NEW
+ACTIVATE TOOL "CUTTER D 63"
+MACRO FILESELECTOR
+
+	reset localvars
+	DIALOGS MESSAGE OFF
+	DIALOGS ERROR OFF
+	GRAPHICS LOCK
+	
+PROJECT RESET
+No
+EDIT PAR 'SimulationState.ToolControl.OrientationVector.Mode' 'as_set_on_toolpath'
+EDIT PAR 'SimulationState.ToolControl.ToolAxisConstraint.Mode' 'unconstrained'
+SIMULATE JOG RTCP NONE
+SIMULATE TOOLWP NODRAW
+DRAW MACHINETOOL ;
+FORM RIBBON BACKSTAGE CLOSE RESET ALL
+MACRO FILESELECTOR
+
+	reset localvars
+	DIALOGS MESSAGE OFF
+	DIALOGS ERROR OFF
+	GRAPHICS LOCK
+	
+MACRO FILESELECTOR
+
+	reset localvars
+	DIALOGS MESSAGE OFF
+	DIALOGS ERROR OFF
+	GRAPHICS LOCK
+	

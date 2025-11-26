@@ -1,0 +1,14 @@
+EXPLORER SELECT Toolpath "Toolpath\3d-Offset-Semi-Finish" NEW
+EXPLORER SELECT Toolpath "Toolpath\Semi-Finish-Contour-D16" NEW
+EXPLORER SELECT Toolpath "Toolpath\3d-Offset-Semi-Finish" NEW
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "C:/Users/dcard/AppData/Local/Autodesk/PowerMill/My-Strategies/Corner-Semi-Finish.ptf"
+RENAME TOOLPATH "1" "Semi-Finish-Corner"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWCornerFinMPencil
+EDIT TPPAGE SWLimit
+EDIT TOOLPATH "Semi-Finish-Corner" CALCULATE
+FORM ACCEPT SFCornerFinMPencil
+EXPLORER SELECT Toolpath "Toolpath\Semi-Finish-Corner" NEW
+FORM COLLISION
+EDIT COLLISION APPLY
+COLLISION ACCEPT

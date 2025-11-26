@@ -1,0 +1,109 @@
+FUNCTION Main() {
+
+	GRAPHICS LOCK
+
+	REAL $tolerance = 0.01
+	STRING $TPName = entity('toolpath', '').name
+
+	// Create pattern and insert toolpath
+	CREATE PATTERN "TempPat"
+	EDIT PATTERN "TempPat" INSERT TOOLPATH $TPName
+
+	// export pattern as pic file and delete the pattern
+	STRING $fileName = project_pathname(0) + "/1.pic"
+	STRING $cmd = "KEEP PATTERN 'TempPat' FILESAVE '" + $fileName + "' Yes"
+	DOCOMMAND $cmd
+	DELETE PATTERN "TempPat"
+
+	// Get all unique z levels from the pic file
+	FILE OPEN $fileName FOR READ AS input
+	STRING LIST $file = {}
+	FILE READ $file FROM input
+	FILE CLOSE input
+	$file[1] = ""
+	REAL LIST $ZLevels = {}
+	FOREACH $line IN $file {
+		STRING LIST $Tokens = tokens($line,' ')
+		IF (size($Tokens) == 3 OR size($Tokens) == 5) {
+			REAL $ZValue = 0
+			CALL ConvertSciNot($Tokens[2], $ZValue)
+			INT $s = add_last($ZLevels, $ZValue)
+		}
+	}
+	INT n = remove_duplicates($ZLevels)
+	$ZLevels = sort($ZLevels)
+	IF (size($ZLevels) == 1) {
+		// Only one z level -> Exit Macro
+		RETURN
+	}
+
+	//Split toolpath
+	STRING $OldName = ""
+	STRING $NewName = ""
+	INT $counter = 0
+	REAL $ZLevel = $ZLevels[$counter] + $tolerance
+
+	// First Split
+	ACTIVATE Toolpath $TPName
+	EDIT TOOLPATH LIMIT PLANE
+	EDIT TOOLPATH LIMIT PLANEOPTIONS SELECT Z
+	EDIT TOOLPATH LIMIT PLANEOPTIONS POINT POSZ $ZLevel
+	EDIT TOOLPATH LIMIT DELETE N
+	EDIT TOOLPATH LIMIT KEEP BOTH
+	EDIT TOOLPATH LIMIT REORDER NO
+	PROCESS TPLIMIT
+	// rename original TP to X_Save
+	$NewName = $TPName + "_Save"
+	RENAME Toolpath $TPName $NewName
+	// rename X_1 to X_ZLevel
+	$OldName = $TPName + "_1"
+	$NewName = $TPName + "_Z" + ROUND($ZLevel - $tolerance, 2)
+	RENAME Toolpath $OldName $NewName
+	// rename X_2 to X
+	$OldName = $TPName + "_2"
+	$NewName = $TPName
+	RENAME Toolpath $OldName $NewName
+
+	// X Splits
+	$counter = $counter + 1
+	IF (size($ZLevels) > 2) {
+		WHILE ($counter < size($ZLevels) - 1) {
+			ACTIVATE Toolpath $TPName
+			$ZLevel = $ZLevels[$counter] + $tolerance
+			EDIT TOOLPATH LIMIT DELETE Y
+			EDIT TOOLPATH LIMIT PLANEOPTIONS POINT POSZ $ZLevel
+			PROCESS TPLIMIT
+			// rename X_1 to X_ZLevel
+			$OldName = $TPName + "_1"
+			$NewName = $TPName + "_Z" + ROUND($ZLevel - $tolerance, 2)
+			RENAME Toolpath $OldName $NewName
+			// rename X_2 to X
+			$OldName = $TPName + "_2"
+			$NewName = $TPName
+			RENAME Toolpath $OldName $NewName
+			$counter = $counter + 1
+		}
+	}
+
+	//Last Split
+	ACTIVATE Toolpath $TPName
+	$ZLevel = $ZLevels[$counter] + $tolerance
+	EDIT TOOLPATH LIMIT DELETE Y
+	//EDIT TOOLPATH LIMIT KEEP OUTER
+	EDIT TOOLPATH LIMIT PLANEOPTIONS POINT POSZ $ZLevel
+	PROCESS TPLIMIT
+	// rename X_1 to X_ZLevel
+	$OldName = $TPName + "_1"
+	$NewName = $TPName + "_Z" + ROUND($ZLevel - $tolerance, 2)
+	RENAME Toolpath $OldName $NewName
+	FORM CANCEL TPLIMIT		
+}
+
+
+FUNCTION ConvertSciNot(STRING $input, OUTPUT REAL $output) {
+
+	STRING LIST $Tokens = tokens($input,'E')
+	REAL $first = real($tokens[0])
+	INT $exp = int($tokens[1])
+	$output = $first * 10 ^ $exp
+}

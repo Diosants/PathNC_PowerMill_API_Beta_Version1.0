@@ -1,0 +1,76 @@
+// Feature Group
+
+CREATE FEATUREGROUP ;
+EXPLORER SELECT FeatureGroup "FeatureGroup\1" NEW
+ACTIVATE FEATUREGROUP "#" MODE FEATUREEDITOR START
+MODE FEATUREEDITOR MODE DETECT
+MODE FEATURECHOOSER CHOOSE ALL
+FORM ACCEPT FEATUREFILTER
+MODE FEATUREEDITOR FINISH ACCEPT
+
+// FINISH FEATURE GROUP
+
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Area-Clearance.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Area-Clearance.ptf"
+
+RENAME TOOLPATH "#" "Feature_Pocket_Rough"
+EDIT TPPAGE SWFeatures
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+FORM TOOLDBSEARCH
+TOOLDBSEARCH ACCEPT
+ACTIVATE TOOL "CUTTER D 25"
+EDIT TPPAGE SWLimit
+ACTIVATE BOUNDARY " "
+EDIT TPPAGE SWPocketAreaClear
+EDIT PAR 'Tolerance' ".05"
+EDIT PAR 'Thickness' ".5"
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "20.0"
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN ".5"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'climb'
+EDIT PAR 'CutDirection' 'climb'
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishFlrWall
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Active' '1'
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "1"
+EDIT TPPAGE SWHighSpeedAClr
+EDIT PAR 'AreaClearance.Offset.Links' 'straight'
+EDIT PAR 'AreaClearance.Offset.Links' 'smooth'
+EDIT TPPAGE SWOrderBasic
+EDIT TPPAGE SWApproach
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT PAR 'CollisionCheck' '0'
+EDIT PAR 'CollisionCheck' '1'
+EDIT TPPAGE SWCutterComp
+EDIT  PAR 'CNCCutterCompensation.Active' '1'
+EDIT PAR 'CNCCutterCompensation.Active' '0'
+EDIT TPPAGE SWLeadIn
+FORM PMLLEADINRAMP EDIT TOOLPATH LEADS RAMPPAGE LEADINRAMPOPT1
+EDIT TOOLPATH LEADS LEADIN RAMPOPT ZIGANGLE "1"
+EDIT TOOLPATH LEADS LEADIN RAMPOPT HEIGHT_INCREMENT ".5"
+LEADINRAMP ACCEPT
+EDIT TPPAGE SWLeadOut
+EDIT TOOLPATH LEADS LEADOUT NONE
+EDIT TPPAGE SWFirstLastLeads
+EDIT TPPAGE SWLeadExtensions
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "50"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'skim'
+EDIT TPPAGE SWLeadFeedRate
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "2500"
+EDIT FRATE "3500"
+EDIT PRATE "3500"
+EDIT COOLANT AIR
+EDIT TOOLPATH "Feature_Pocket_Rough" CALCULATE
+FORM ACCEPT SFPocketAreaClear
+

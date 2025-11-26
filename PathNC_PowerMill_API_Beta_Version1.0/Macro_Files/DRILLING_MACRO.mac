@@ -1,0 +1,104 @@
+FUNCTION Main() {
+	
+	// Change this to the toolpath name
+	STRING $toolpathName = "MyDrillPathName"
+	
+	// Change this to be the number of holes to split that path at
+	INT $holeSplitValue = 10
+	
+	// Setup the variables
+	BOOL $entityExists = FALSE
+	STRING $featureSetName = ""
+	INT $featureCount = 0
+
+	// Check to see if the toolpath exists
+	CALL DoesEntityNameExist('Toolpath', $toolpathName, $entityExists)
+	IF $entityExists == FALSE {
+		// Not an existing toolpath. Abort!
+		MACRO ABORT
+	}
+	// Check to see if it's a drilling strategy
+	IF entity('Toolpath', 'MyDrillPathName').Strategy == 'drill' {
+		
+		// Activate the path so it'll activate featuresset and
+		// also sellect the features used for calculating the path
+		ACTIVATE TOOLPATH $toolpathName
+		
+		// Get the featureset name
+		$featureSetName = entity('Toolpath', $toolpathName).FeatureSet.Name
+		
+		// Create a STRING LIST to store the new generated featureset names
+		STRING LIST $tempFeaturesetNameList = {}
+		
+		// Get the next safe name for a generates featureset
+		STRING $nextAvailableName = ""
+		CALL GetSafeEntityName('FeatureSet', $featureSetName, $nextAvailableName)
+			
+		// We make a copy of the orignal featureset so we omly get the features
+		// that were used during the calculation of the path
+		COPY FEATURESET $featureSetName SELECTED
+		ACTIVATE FEATURESET $nextAvailableName
+		
+		// Loop through and split the featuresets up by the specified
+		// number of features. This part was writen at 3am so it's pretty
+		// bad and the logic could probably be cleaned up a lot
+		INT $holeCount = 0
+		FOREACH $name IN extract(components(entity('featureset', $nextAvailableName)),'name') {
+			// Check to see if we've reached or split value yet. If so
+			// we'll break out those features into a new featureset
+			IF $holeCount == $holeSplitValue {
+				$holeCount = 0
+				STRING $tempName = ""
+				CALL GetSafeEntityName('FeatureSet', $nextAvailableName, $tempName)
+				COPY FEATURESET $nextAvailableName SELECTED
+				//$nextAvailableName = $tempName
+				ACTIVATE FEATURESET $nextAvailableName
+				EDIT FEATURESET $nextAvailableName DESELECT ALL
+				INT $i = add_last($tempFeaturesetNameList, $tempName)
+			}
+			// Continue sellecting the features 
+			EDIT FEATURESET $nextAvailableName SELECT $name
+			$holeCount = $holeCount + 1	
+			
+		}
+		// This is nasty but, because of the bad logic above, we'll
+		// still have the remaining selected holes that didn't reached
+		// our split value so we'll do one final split
+		STRING $tempName = ""
+		CALL GetSafeEntityName('FeatureSet', $nextAvailableName, $tempName)
+		COPY FEATURESET $nextAvailableName SELECTED
+		INT $i = add_last($tempFeaturesetNameList, $tempName)
+		
+		// Get the next safe name for a toolpath
+		STRING $newPathName = ""
+		$newPathName = $toolpathName
+		//CALL GetSafeEntityName('Toolpath', $toolpathName, $newPathName)
+		
+		//Loop through the copied featureset names and generate a drill
+		//path, based on your existing one
+		FOREACH $copiedFeatureset IN $tempFeaturesetNameList {
+			ACTIVATE TOOLPATH $newPathName FORM TOOLPATH
+			STRING $tempName = ""
+			CALL GetSafeEntityName('Toolpath', $newPathName, $tempName)
+			EDIT TOOLPATH $newPathName CLONE
+			$newPathName = $tempName
+			ACTIVATE TOOLPATH $newPathName FORM TOOLPATH
+			
+			ACTIVATE Featureset $copiedFeatureset
+			EDIT TOOLPATH $newPathName CALCULATE
+			
+			$newPathName = $tempName
+		}
+	}
+	
+}
+
+// Checks to see if an entity's name exists
+FUNCTION DoesEntityNameExist(STRING entityType, STRING entityName, OUTPUT BOOL exists) {
+	$exists = entity_exists($entityType, $entityName)
+}
+
+// Returns the next available safe name for an entity
+FUNCTION GetSafeEntityName(STRING entityType, STRING baseName, OUTPUT STRING safeName) {
+	$safeName = new_entity_name($entityType, $baseName)
+}

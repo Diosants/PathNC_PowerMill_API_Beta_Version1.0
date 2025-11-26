@@ -1,0 +1,25 @@
+OBJECT LIST smState = {}
+$smState = entity('stockmodel','').states
+STRING LIST stName = {}
+INT i = 0
+
+FOREACH ob IN smState {
+    IF $smState[i].calculated == TRUE {
+        INT $c = add_last(stName, $smState[i].name)
+        }
+    $i = $i + 1
+}
+
+$i = 0
+
+INT $k = INPUT CHOICE MULTIPLE $stName "Select Toolpaths To Remove"
+
+FOREACH name IN $k {
+    EDIT STOCKMODEL ; REMOVE_INPUT INDEXED_STATE $k[i]
+}
+
+EXPLORER SELECT StockModel "StockModel\STOCK" NEW
+DELETE STOCKMODEL "STOCK"
+
+
+ 

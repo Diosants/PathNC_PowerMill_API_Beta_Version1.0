@@ -1,0 +1,30 @@
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Area-Clearance.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Area-Clearance.ptf"
+
+RENAME TOOLPATH "1" "1"
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWPocketAreaClear
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWPocketAreaClear
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+EDIT PAR 'CutDirection' 'any' EDIT PAR 'AreaClearance.Raster.Style' 'two_way_joined'
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWPocketAreaClear
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "10"
+EDIT PAR 'Thickness' "1"
+EDIT PAR 'UseAxialThickness' '0'
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN "1"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Offset.Order' 'automatic'
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishFlrWall
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TOOLPATH "1" CALCULATE
+FORM ACCEPT SFPocketAreaClear
+

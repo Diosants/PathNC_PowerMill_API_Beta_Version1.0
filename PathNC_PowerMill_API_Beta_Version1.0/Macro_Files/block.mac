@@ -1,0 +1,21 @@
+FUNCTION myBlkFunction(OBJECT blk) {
+    IF get_typename(blk) != "Block" {
+        MESSAGE ERROR "Expecting a Block object"
+        MACRO ABORT
+    }
+    // Code that works on block objects
+}
+// Find block with maximum zrange
+FUNCTION myZrangeBlockFunc(OUTPUT OBJECT Blk) {
+    // The
+    REAL zrange = 0
+    FOREACH tp IN folder('toolpath') {
+        // find zlength of this block
+        REAL z = tp.Block.Limits.ZMax - tp.Block.Limits.ZMin
+        IF z > zrange {
+            // Copy if longer than previously
+            $Blk = Block
+            $zrange = z
+        }
+    }
+}

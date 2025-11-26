@@ -1,0 +1,37 @@
+// This macro was designed to detect bad surfaces before they become an issue
+
+FUNCTION MAIN() {
+
+CALL SendToBadSurfaceLevel()
+
+CALL DeleteBadSurfaces()
+
+
+}
+
+FUNCTION SendToBadSurfaceLevel() {
+
+FOREACH level IN FOLDER('Level') {
+
+	STRING levelName = $level.Name
+
+	EDIT LEVEL $levelName MESH '.25'
+
+}
+
+}
+
+FUNCTION DeleteBadSurfaces() {
+	
+IF entity_exists('level','Bad Surfaces') {
+
+EDIT MODEL ALL DESELECT ALL
+EDIT LEVEL "Bad Surfaces" SELECT ALL
+DELETE MODEL SELECTED
+DELETE LEVEL "Bad Surfaces"
+
+}	
+	
+	
+	
+}

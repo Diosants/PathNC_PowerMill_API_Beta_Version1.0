@@ -1,0 +1,25 @@
+STRING LIST $ToolInfos = {}
+
+FOREACH $t IN folder('Tool') {	
+	STRING $ToolInfo = $t.Diameter + " " + $t.Number.Value
+	INT $Tnum = $t.Number.Value
+	IF NOT member($ToolInfos, $ToolInfo) {
+		INT a = add_last($ToolInfos, $ToolInfo)
+		
+		} ELSE {
+			INT $NewNumber = $Tnum + 10000
+			
+			$ToolInfo = replace($ToolInfo, string($Tnum), "")
+			$ToolInfo = $ToolInfo + $NewNumber
+			WHILE member($ToolInfos, $ToolInfo) {
+				$ToolInfo = replace($ToolInfo, string($NewNumber), "")
+				$NewNumber = $NewNumber + 10000
+				$ToolInfo = $ToolInfo + $NewNumber
+				}
+			EDIT TOOL $t NUMBER COMMANDFROMUI $NewNumber
+			YES
+			INT a = add_last($ToolInfos, $ToolInfo)
+			}
+	}
+
+MESSAGE INFO "Done.

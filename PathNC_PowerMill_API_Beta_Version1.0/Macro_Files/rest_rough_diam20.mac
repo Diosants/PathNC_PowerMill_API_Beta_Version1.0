@@ -1,0 +1,50 @@
+EXPLORER SELECT Toolpath "Toolpath\Rough_Dia40" NEW
+COPY TOOLPATH "Rough_Dia40"
+EXPLORER SELECT Toolpath "Toolpath\Rough_Dia40_1" NEW
+RENAME Toolpath "Rough_Dia40_1" "Rest_Rough_Dia20"
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia20" NEW
+ACTIVATE TOOLPATH "Rest_Rough_Dia20"
+ACTIVATE TOOLPATH "Rest_Rough_Dia20" FORM TOOLPATH
+EDIT TOOLPATH "Rest_Rough_Dia20" RECYCLE
+EDIT TPPAGE SWBlock
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWAreaClearance
+EDIT TPPAGE SWLimit
+ACTIVATE BOUNDARY " "
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "14"
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN ".5"
+EDIT PAR 'AreaClearance.Rest.Active' '1'
+EDIT TPPAGE SWRest
+EDIT PAR 'AreaClearance.Rest.ReferenceType' 'stockmodel'
+EDIT PAR 'StockModelState.StockModel' "STOCK"
+EDIT TPPAGE SWFeedSpeed
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "CUTTER D 20"
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "3000"
+EDIT TPPAGE SWLink
+EDIT TPPAGE SWLeadExtensions
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].ApplyConstraints' '1'
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Toolpath.Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.DefaultLink[0].Type' 'skim'
+EDIT TOOLPATH "Rest_Rough_Dia20" CALCULATE
+FORM ACCEPT SFAreaClearance
+FORM COLLISION
+EDIT COLLISION APPLY
+COLLISION ACCEPT
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH "Rest_Rough_Dia20" LAST
+EDIT STOCKMODEL "STOCK" CALCULATE_STATE INDEXED_STATE 2
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia20" NEW
+DRAW Toolpath "Rest_Rough_Dia20"
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia20" NEW
+UNDRAW Toolpath "Rest_Rough_Dia20"
+EXPLORER SELECT StockModel "StockModel\STOCK" NEW
+DRAW StockModel "STOCK"
+ROTATE TRANSFORM ISO1
+EXPLORER SELECT Tool "Tool\Cutter\CUTTER D 20" NEW
+DEACTIVATE TOOL

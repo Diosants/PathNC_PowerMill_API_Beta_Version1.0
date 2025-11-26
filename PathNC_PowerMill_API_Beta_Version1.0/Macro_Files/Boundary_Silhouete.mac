@@ -1,0 +1,12 @@
+STRING selectedToolName = INPUT ENTITY TOOL "Please select a tool from the list"
+ACTIVATE TOOL  $selectedToolName
+EDIT MODEL ALL SELECT ALL
+CREATE BOUNDARY ;SILHOUETTE FORM BOUNDARY
+EDIT BOUNDARY "#" CALCULATE
+EDIT BOUNDARY "#" ACCEPT BOUNDARY ACCEPT
+STRING BName = "Silhouete_Tool_Diam " + string(Tool.Diameter)
+RENAME BOUNDARY ; $BName
+PRINT = Boundary.Name
+
+
+

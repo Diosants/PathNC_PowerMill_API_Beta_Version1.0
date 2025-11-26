@@ -1,0 +1,18 @@
+
+
+
+
+
+
+
+
+REAL xMinus = $toolpath.Block.Limits.XMin
+REAL yMinus = $toolpath.Block.Limits.YMin
+REAL xPlus = $toolpath.Block.Limits.XMax
+REAL yPlus = $toolpath.Block.Limits.YMax
+
+CREATE PATTERN ; EDIT PATTERN ; CURVEEDITOR NOGUI START
+CURVEEDITOR MODE RECTANGLE
+MODE COORDINPUT COORDINATES $xMinus $yMinus 0
+MODE COORDINPUT COORDINATES $xPlus $yPlus 0
+CURVEEDITOR FINISH ACCEPT

@@ -1,0 +1,13 @@
+STRING selectedToolName = INPUT ENTITY TOOL "Please select a tool from the list"
+ACTIVATE TOOL  $selectedToolName
+EDIT MODEL ALL SELECT ALL
+CREATE BOUNDARY ; SHALLOW FORM BOUNDARY
+EDIT BOUNDARY "1" CALCULATE
+EDIT BOUNDARY "1" ACCEPT BOUNDARY ACCEPT
+
+
+STRING BName = "Shallow_Tool_Diam " + string(Tool.Diameter)
+RENAME BOUNDARY ; $BName
+PRINT = Boundary.Name
+
+ 

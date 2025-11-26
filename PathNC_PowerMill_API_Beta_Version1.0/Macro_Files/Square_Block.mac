@@ -1,0 +1,500 @@
+// DEVELOPED BY :   DIOGENES CARDOSO
+// LAST UPDATED :  2025-10-08
+//  MUST BE REFACTORED,  TO DEVELOP FUNCTIONS,  AND SO ON
+
+
+RESET LOCALVARS
+
+DIALOGS MESSAGE OFF
+
+DIALOGS ERROR OFF
+
+//  Variables
+REAL  $VarBlockExpansion    = INPUT "Enter Block  Expansion (Must be bigger than Tool Radius)"
+REAL  $VarBlockDepth     = INPUT "Enter Block Depth (Must be Negative)"
+
+
+ROTATE TRANSFORM ISO1
+//  Get Pattern From Block First
+
+FORM BLOCK
+DELETE BLOCK
+EDIT BLOCK RESETLIMIT "0"
+EDIT BLOCK RESET
+BLOCK ACCEPT
+REAL xMinus = $toolpath.Block.Limits.XMin
+REAL yMinus = $toolpath.Block.Limits.YMin
+REAL xPlus = $toolpath.Block.Limits.XMax
+REAL yPlus = $toolpath.Block.Limits.YMax
+
+CREATE PATTERN ; EDIT PATTERN ; CURVEEDITOR NOGUI START
+CURVEEDITOR MODE RECTANGLE
+MODE COORDINPUT COORDINATES $xMinus $yMinus 0
+MODE COORDINPUT COORDINATES $xPlus $yPlus 0
+CURVEEDITOR FINISH ACCEPT
+EXPLORER SELECT Pattern "Pattern\#" NEW
+STRING BName = "Pattern_From_Block"
+RENAME  Pattern ; $BName
+PRINT =  Pattern.Name
+
+//  End Macro Gep Pattern From Block
+
+// Pick WorkPlane
+
+STRING $VarSelectedWorkPlane = INPUT ENTITY WORKPLANE "Please select Workplane."
+
+MACRO PAUSE " Please, Select the Tool"
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Please select a tool from the list."
+REAL  $VarToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)" 
+REAL  $VarCurvethickness = INPUT  " Enter Stock to leave per side " 
+
+
+
+CREATE SETUP ; FORM SETUP
+SELECT WORKPAGE SETUP STPSTOCK
+RENAME SETUP EVAL $form_entity('setup') "Square_Plate"
+SELECT WORKPAGE SETUP STPWORKPLANE
+EDIT SETUP EVAL $form_entity('setup') WORKPLANE $VarSelectedWorkPlane //  DAR OPCAO DE ESCOLHER O WORKPLANE
+SELECT WORKPAGE SETUP STPSTOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK COORDINATE WORKPLANE
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMAX LOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESETLIMIT $VarBlockExpansion 
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESET
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMIN UNLOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMIN $VarBlockDepth
+SELECT WORKPAGE SETUP STPCONNECT
+EDIT SETUP LEADS RAISEFORM
+EDIT SETUP SAFEAREA SIZE  "10"
+EDIT SETUP SAFEAREA PLUNGE_SIZE  "5"
+EDIT SETUP SAFEAREA APPLY
+PROCESS SETUP LEADS
+LEADS CANCEL
+FORM ACCEPT SETUP
+EXPLORER SELECT Setup "Setup\Square_Plate" NEW
+ACTIVATE SETUP "Square_Plate" FORM STRATEGYSELECTOR
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Rough_Block_Square"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarCurvethickness
+EDIT PAR 'CurveThickness' $VarCurvethickness
+EDIT PAR 'ZLimits.Minimum' $VarBlockDepth  
+EDIT PAR 'Tolerance' ".1"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Pattern' "Pattern_From_Block"
+EDIT PATTERN_DECORATION EDIT_MODE
+MACRO PAUSE " Select Machine Side"
+EDIT PATTERN_DECORATION SHOW_MODE
+
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarToolDepth
+
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+EDIT TOOLPATH "Rough_Block_Square" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+
+//  Semi Finish
+
+REAL $VarSemiCurvethickness = .15
+
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "SemiFinish_Block_Square(+.15mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarSemiCurvethickness
+EDIT PAR 'CurveThickness' $VarSemiCurvethickness
+EDIT PAR 'ZLimits.Minimum' $VarBlockDepth  
+EDIT PAR 'Tolerance' ".1"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarToolDepth
+
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "SemiFinish_Block_Square(+.15mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+// Finish
+
+//  Variables
+MACRO PAUSE " Please, Select  Finish Tool"
+STRING $VarFinishSelectedTool = INPUT ENTITY TOOL "Select Finish Tool."
+REAL  $VarFinishToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)"  
+
+REAL  $VarFinishCurvethickness = 0
+
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Finish_Block_Square(00)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarFinishSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarFinishCurvethickness
+EDIT PAR 'CurveThickness' $VarFinishCurvethickness
+EDIT PAR 'ZLimits.Minimum'  $VarBlockDepth 
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarFinishToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Finish_Block_Square(00)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+// Adjustes 01 -0.025
+
+
+//  Variables
+MACRO PAUSE " Please, Select Adjust Tool"
+STRING $VarAdjustSelectedTool = INPUT ENTITY TOOL "Select Adjust Tool."
+REAL  $VarAdjustToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)"  
+
+REAL $VarAdjustCurvethickness = -.0125
+
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Adjust01_Block_Square(-.025mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarAdjustSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarAdjustCurvethickness
+EDIT PAR 'CurveThickness' $VarAdjustCurvethickness
+EDIT PAR 'ZLimits.Minimum'   $VarBlockDepth
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarAdjustToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Adjust01_Block_Square(-.025mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+// Adjust 02 -0.05
+
+REAL $VarAdjust02Curvethickness = -.025
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Adjust02_Block_Square(-.05mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarAdjustSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarAdjust02Curvethickness
+EDIT PAR 'CurveThickness'  $VarAdjust02Curvethickness
+EDIT PAR 'ZLimits.Minimum'   $VarBlockDepth
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarAdjustToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Adjust02_Block_Square(-.05mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+
+
+// Adjust 03 -0.075
+
+REAL $VarAdjust03Curvethickness = -0.0375
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Adjust03_Block_Square(-.075mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarAdjustSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarAdjust03Curvethickness
+EDIT PAR 'CurveThickness' $VarAdjust03Curvethickness
+EDIT PAR 'ZLimits.Minimum'   $VarBlockDepth
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarAdjustToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Adjust03_Block_Square(-.075mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+
+
+
+
+// Adjust 04 -0.1
+
+REAL $VarAdjust04Curvethickness = -.050
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Adjust04_Block_Square(-.10mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarAdjustSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarAdjust04Curvethickness
+EDIT PAR 'CurveThickness'  $VarAdjust04Curvethickness
+EDIT PAR 'ZLimits.Minimum'  $VarBlockDepth
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarAdjustToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Adjust04_Block_Square(-.10mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+
+// Adjust 05 -0.125
+
+REAL $VarAdjust05Curvethickness = -.0675
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Adjust_Block_Square(-.125mm)"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $VarAdjustSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'Thickness' $VarAdjust05Curvethickness
+EDIT PAR 'CurveThickness'  $VarAdjust05Curvethickness
+EDIT PAR 'ZLimits.Minimum'   $VarBlockDepth
+EDIT PAR 'Tolerance' ".02"
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarAdjustToolDepth
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Adjust_Block_Square(-.125mm)" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+
+// Updating Setup Stock
+
+EXPLORER SELECT Setup "Setup\Square_Plate" NEW
+ACTIVATE SETUP "Square_Plate" FORM STRATEGYSELECTOR
+FORM SETUP "Square_Plate"
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMAX LOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESETLIMIT "0"
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESET
+FORM ACCEPT SETUP
+
+
+DIALOGS MESSAGE ON
+
+DIALOGS ERROR ON
+
+
+
+
+
+
+
+
+

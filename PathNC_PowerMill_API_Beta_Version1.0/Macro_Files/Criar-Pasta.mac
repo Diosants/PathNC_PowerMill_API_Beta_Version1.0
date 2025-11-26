@@ -1,0 +1,79 @@
+ //    MACRO   PARA CRIAR PASTA E MOVER  PROGRAMAS
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Facing"
+}
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Facing "
+FOREACH tp IN ToolpathNames  {
+EDIT FOLDER  "Toolpath\Facing" INSERT $tp LAST
+}
+
+
+//  Folder to Drills
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Drills"
+}
+STRING LIST ToolpathNames1 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Drills"
+FOREACH tp IN ToolpathNames1  {
+EDIT FOLDER  "Toolpath\Drills" INSERT $tp LAST
+}
+
+// Folder to Rough//
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Rough"
+}
+STRING LIST ToolpathNames2 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Rough"
+FOREACH tp IN ToolpathNames2  {
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+}
+
+
+// Folder to Semi-Finish//
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Semi-Finish"
+}
+STRING LIST ToolpathNames3 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Semi-Finish"
+FOREACH tp IN ToolpathNames3  {
+EDIT FOLDER  "Toolpath\Semi-Finish" INSERT $tp LAST
+}
+
+
+// Folder to Finish
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Finish"
+}
+STRING LIST ToolpathNames4 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Finish"
+FOREACH tp IN ToolpathNames4  {
+EDIT FOLDER  "Toolpath\Finish" INSERT $tp LAST
+}
+
+// Folder to Adjusts
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Adjustments"
+}
+STRING LIST ToolpathNames5 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Adjustments"
+FOREACH tp IN ToolpathNames5  {
+EDIT FOLDER  "Toolpath\Adjustments" INSERT $tp LAST
+}
+
+// Folder to Obsolete
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Obsolete"
+}
+STRING LIST ToolpathNames6 = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving to Obsolete"
+FOREACH tp IN ToolpathNames6  {
+EDIT FOLDER  "Toolpath\Obsolete" INSERT $tp LAST
+}

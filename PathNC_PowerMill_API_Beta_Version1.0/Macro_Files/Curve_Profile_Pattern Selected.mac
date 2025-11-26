@@ -1,0 +1,148 @@
+RESET LOCALVARS
+
+//  deleting existing block first
+
+FORM BLOCK
+DELETE BLOCK
+EDIT BLOCK XLEN UNLOCK
+EDIT BLOCK YLEN UNLOCK
+EDIT BLOCK ZLEN UNLOCK
+EDIT BLOCK RESETLIMIT "0"
+BLOCK ACCEPT
+//
+
+
+
+// =======================================
+//  BLOCK CREATION MACRO
+//  Author: Diogenes Cardoso
+//  Description: Create block by user choice (Box or Cylinder)
+// =======================================
+
+
+// --- VARIABLES ---
+STRING LIST $BlockTypeOptions = {"Box", "Cylinder"}
+INT $BlockTypeSelected = INPUT CHOICE $BlockTypeOptions "Select Block Type:"
+
+
+// --- CHOOSE BLOCK TYPE ---
+FORM BLOCK
+
+SWITCH $BlockTypeSelected {
+    CASE 0
+        EDIT BLOCKTYPE BOX
+        BREAK
+
+    CASE 1
+        EDIT BLOCKTYPE CYLINDER
+        BREAK
+}
+
+REAL $VarBlockSpansion = INPUT " ENTER BLOCK EXPANSION"
+REAL $VarBlockDepth = INPUT " ENTER BLOCK DEPTH"
+
+
+
+
+
+
+// --- DEFINE BLOCK PARAMETERS ---
+EDIT BLOCK COORDINATE WORKPLANE
+EDIT BLOCK LIMITTYPE PATTERN
+EDIT BLOCK RESET
+EDIT BLOCK ZMIN LOCK
+EDIT BLOCK ZMAX LOCK
+EDIT BLOCK RESETLIMIT $VarBlockSpansion 
+EDIT BLOCK RESET
+EDIT BLOCK ZMIN UNLOCK
+EDIT BLOCK ZMIN $VarBlockDepth
+EDIT BLOCK ZMIN LOCK
+
+BLOCK ACCEPT
+
+MACRO PAUSE " Please, Select the Tool"
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Please select a tool from the list."
+REAL  $VarToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)" 
+REAL  $VarCurvethickness = INPUT  " Enter Stock to leave per side " 
+
+
+// Define options
+STRING LIST $CutDirectionOptions = {"Conventional", "Climb", "Any"}
+
+// Ask the user which direction to use
+INT $CutDirectionSelected = INPUT CHOICE $CutDirectionOptions "Select Cut Direction:"
+
+// Apply user's selection to the parameter
+SWITCH $CutDirectionSelected {
+    CASE 0
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+    CASE 1
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'climb'
+    CASE 2
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+}
+
+
+
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+
+
+RENAME TOOLPATH "#" "1"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'CurveThickness' $VarCurvethickness
+EDIT PAR 'ZLimits.Minimum' $VarBlockDepth  
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT PAR 'Thickness' $VarCurvethickness
+EDIT PAR 'Tolerance' ".1"
+EDIT TPPAGE SWCutDistVerHor
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'AreaClearance.Profile.CutDirection' $CutDirectionOptions
+EDIT PAR 'Pattern' "Pattern_From_Block"
+EDIT PATTERN_DECORATION EDIT_MODE
+MACRO PAUSE " Select Machine Side"
+EDIT PATTERN_DECORATION SHOW_MODE
+
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarToolDepth
+
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "1" CALCULATE
+FORM ACCEPT SFCurveProfile
+STRING TName = string(Tool.Name) + " (Stock) " +  string(Toolpath.Thickness)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+
+ROTATE TRANSFORM ISO1
+DELETE SCALE
+
+
+
+
+

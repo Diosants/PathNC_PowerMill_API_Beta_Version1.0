@@ -1,0 +1,4 @@
+PRINT PAR "entity('stockmodel','stockmodel 
+name').States[0].Locked"  
+PRINT PAR "entity('stockmodel','stockmodel 
+name').States[1].References[1]"  

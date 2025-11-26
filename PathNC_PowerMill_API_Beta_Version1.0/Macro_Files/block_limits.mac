@@ -1,0 +1,21 @@
+real lengthx = ""
+real lengthy = ""
+real lengthz = ""
+string limits = ""
+
+FOREACH ll IN FOLDER ('LEVEL') {
+UNDRAW LEVEL ALL DRAW LEVEL $ll.name
+EDIT LEVEL $ll.name SELECT SURFACE
+FORM BLOCK
+EDIT BLOCK RESETLIMIT "0"
+DELETE BLOCK
+EDIT BLOCK RESET
+DRAW BLOCK
+$lengthx = $widget("RoughBlock.LimitFrame.LenX").value
+$lengthy = $widget("RoughBlock.LimitFrame.LenY").value
+$lengthz = $widget("RoughBlock.LimitFrame.LenZ").value
+//MACRO PAUSE $Msg
+$limits = "Block limits = " + "X" + round($lengthx, 3) + "  Y" + round($lengthy, 3) + "  Z" + round($lengthZ, 3)
+message info $limits
+BLOCK ACCEPT
+}

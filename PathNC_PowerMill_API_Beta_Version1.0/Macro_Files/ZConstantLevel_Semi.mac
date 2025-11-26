@@ -1,0 +1,28 @@
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Finishing/Constant-Z-Finishing.002.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Finishing/Constant-Z-Finishing.002.ptf"
+
+EDIT TPPAGE SWBlock
+EDIT BLOCK RESETLIMIT "30"
+EDIT BLOCK RESET
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "ENDMILLR D14"
+EDIT TPPAGE SWConstZFinishing
+EDIT TPPAGE SWLimit
+EDIT PAR 'BoundaryLimit.Keep' 'inside'
+EDIT PAR 'BoundaryLimit.Keep' 'outside'
+EDIT TPPAGE SWConstZFinishing
+EDIT PAR 'Thickness' ".15"
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' "1"
+EDIT PAR 'Cusp.Active' 1
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Cusp.MaxStepdown' ".1"
+EDIT PAR 'Cusp.Height' ".005"
+EDIT TPPAGE SWHighSpeed
+EDIT TPPAGE SWAreaFilter
+EDIT TPPAGE SWAutoVerifBasic
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWToolRapidMv
+RENAME TOOLPATH "1" "Semi_Contour"
+EDIT TOOLPATH "Semi_Contour" CALCULATE
+FORM ACCEPT SFConstZFinishing

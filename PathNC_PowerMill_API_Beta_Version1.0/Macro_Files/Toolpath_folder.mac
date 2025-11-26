@@ -1,0 +1,10 @@
+ //    MACRO   PARA CRIAR PASTA E MOVER  PROGRAMAS
+
+IF NOT folder_exists("Toolpath\duplicated") {
+	CREATE FOLDER "Toolpath" ;
+	RENAME FOLDER # "Rough"
+}
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH "Select toolpaths for moving"
+FOREACH tp IN ToolpathNames  {
+EDIT FOLDER  "Toolpath\Rough" INSERT $tp LAST
+}

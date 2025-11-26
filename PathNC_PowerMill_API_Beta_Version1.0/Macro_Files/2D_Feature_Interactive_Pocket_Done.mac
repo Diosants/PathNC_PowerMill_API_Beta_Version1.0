@@ -1,0 +1,295 @@
+RESET LOCALVARS
+
+
+RESET LOCALVARS
+
+
+//Get Feature group
+
+REAL  $VarLength = INPUT " Enter Length (X)"
+REAL  $VarWidth = INPUT " Enter Width (Y)"
+REAL  $VarHeight = INPUT " Enter Height (mm)"
+REAL  $VarCornerRadius = INPUT " Enter Corner Radius (mm)"
+
+CREATE FEATUREGROUP ;
+EXPLORER SELECT FeatureGroup "#" NEW
+ACTIVATE FEATUREGROUP "#" MODE FEATUREEDITOR START
+MODE FEATUREEDITOR MODE CREATE RECT_POCKET
+MODE FEATUREEDITOR EDIT NAME "#"
+MODE FEATUREEDITOR EDIT LENGTH $VarLength
+MODE FEATUREEDITOR EDIT WIDTH $VarWidth
+MODE FEATUREEDITOR EDIT HEIGHT  $VarHeight
+MODE FEATUREEDITOR EDIT CURVEPOSITION TOP
+MODE FEATUREEDITOR TAB CORNERS
+MODE FEATUREEDITOR EDIT CORNERRADIUS $VarCornerRadius
+MODE FEATUREEDITOR TAB FILLETS
+MODE FEATUREEDITOR TAB ORIGIN
+MODE FEATUREEDITOR EDIT WORKSPACE WORKPLANE
+MODE POSITION START
+MODE POSITION WORKSPACE WORKPLANE
+MODE POSITION PLANE XY
+MODE POSITION CARTESIAN X "0"
+MODE POSITION CARTESIAN Y "0"
+POSITION APPLY
+
+MODE FEATUREEDITOR TAB DIMENSIONS
+FORM APPLY FEEDIT
+FORM CANCEL FEEDIT
+MODE FEATUREEDITOR FINISH ACCEPT
+
+STRING $FtName = "RectPocket_X" + $VarLength + "_Y" + $VarWidth
+RENAME FEATUREGROUP "#" $FtName
+
+FORM BLOCK
+EDIT BLOCK LIMITTYPE FEATURESET
+EDIT BLOCK RESETLIMIT "0"
+EDIT BLOCK RESET
+BLOCK ACCEPT
+ROTATE TRANSFORM TOP
+
+// End Feature group
+// End Feature group
+
+ STRING LIST $FeatureOptions = {"Feature Area Clearance" , "Pocket Area Clearance", "Finish Feature", "Pocket Profile", "Finish Profile"}
+INT  $FeatureOptionSelected = INPUT CHOICE $FeatureOptions "Select Feature Strategy:"
+
+
+
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Please select a tool from the list."
+REAL  $VarToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)" 
+REAL  $VarCurvethickness = INPUT  " Enter Stock to leave per side " 
+
+
+SWITCH $FeatureOptionSelected {
+
+
+// Feature Area Clearance
+
+CASE 0
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Area-Clearance.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Area-Clearance.ptf"
+
+EDIT TPPAGE SWFeatures
+EDIT TPFEATURES LISTUPDATE
+ 0 NEW
+ACTIVATE FEATUREGROUP $FtName
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+EDIT PAR 'CutDirection' 'any'
+EDIT PAR 'Tolerance' ".1"
+EDIT PAR 'Thickness' $VarCurvethickness
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN $VarToolDepth 
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Offset.RemoveCusps' '0'
+EDIT PAR 'AreaClearance.Offset.Order' 'inside_out'
+EDIT TPPAGE SWFinishFlrWall
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Active' '1'
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "1"
+EDIT TPPAGE SWHighSpeedAClr
+EDIT TPPAGE SWOrderBasic
+EDIT TPPAGE SWApproach
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT PAR 'CollisionCheck' '1'
+EDIT PAR 'ModelGougeCheck' '1'
+EDIT TPPAGE SWToolRapidMvClear
+EDIT TPPAGE SWLeadsLinks
+EDIT TPPAGE SWLeadIn
+EDIT TOOLPATH LEADS LEADIN RAMP
+FORM PMLLEADINRAMP EDIT TOOLPATH LEADS RAMPPAGE LEADINRAMPOPT1
+EDIT TOOLPATH LEADS LEADIN RAMPOPT ZIGANGLE "1"
+EDIT TOOLPATH LEADS LEADIN RAMPOPT HEIGHT_INCREMENT ".5"
+EDIT TPPAGE SWLeadOut
+EDIT TOOLPATH LEADS LEADOUT NONE
+EDIT TOOLPATH LEADS LEADOUT2 NONE
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'on_surface'
+EDIT PAR 'Connections.Link[0].ApplyConstraints' '0'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+EDIT TOOLPATH "1" CALCULATE
+LEADINRAMP ACCEPT
+FORM ACCEPT SFAreaClearance
+STRING TName = string(Tool.Name)  +  string (Toolpath.Strategy)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+
+MESSAGE INFO "Feature Area Clearance Calculed successfully"
+
+BREAK
+
+
+// Pocket Area Clearance
+CASE 1
+
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Area-Clearance.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Area-Clearance.ptf"
+
+ACTIVATE FEATUREGROUP $FtName
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWPocketAreaClear
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWPocketAreaClear
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+EDIT PAR 'CutDirection' 'any' EDIT PAR 'AreaClearance.Raster.Style' 'two_way_joined'
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWPocketAreaClear
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "10"
+EDIT PAR 'Thickness'  $VarCurvethickness
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN $VarToolDepth 
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Offset.Order' 'automatic'
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishFlrWall
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TOOLPATH "1" CALCULATE
+FORM ACCEPT SFPocketAreaClear
+STRING TName = string(Tool.Name)  +  string (Toolpath.Strategy)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+MESSAGE INFO "Pocket Area Clearance Calculed successfully"
+
+
+BREAK
+
+
+
+
+// Finish Feature
+
+CASE 2
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Finishing.ptf"
+
+ACTIVATE FEATUREGROUP $FtName
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWFeatureFin
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT PAR 'CutDirection' 'any' EDIT PAR 'AreaClearance.Raster.Style' 'two_way_joined'
+EDIT PAR 'Thickness'  $VarCurvethickness
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT TPPAGE SWCutDistWall
+EDIT PAR 'CutDistances.Radial.Extent' 'number_of_cuts'
+EDIT PAR 'CutDistances.Radial.NumberOfCuts' "1"
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarToolDepth 
+EDIT TPPAGE SWCutDistFlat
+EDIT PAR 'CutDistances.Axial.Extent' 'number_of_cuts'
+EDIT PAR 'CutDistances.Axial.NumberOfCuts' "1"
+EDIT PAR 'ShallowStepover.Active' '1' EDIT PAR 'ShallowStepover.Value' "5"
+EDIT TPPAGE SWAreaFilterAClear
+EDIT TPPAGE SWLeadsLinks
+EDIT TOOLPATH "#" CALCULATE
+FORM ACCEPT SFFeatureFin
+STRING TName = string(Tool.Name)  +  string (Toolpath.Strategy)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+MESSAGE INFO "Finish Feature Calculed successfully"
+
+
+BREAK
+
+
+// Feature Pocket Profile
+
+CASE 3
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Profile.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Profile.ptf"
+
+ACTIVATE FEATUREGROUP $FtName
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT PAR 'Thickness'  $VarCurvethickness
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TPPAGE SWLeadIn
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADOUT COPY
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link[0].ApplyConstraints' '1'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "30"
+EDIT TPPAGE SWPocketProfile
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT TOOLPATH "#" CALCULATE
+FORM ACCEPT SFPocketProfile
+STRING TName = string(Tool.Name)  +  string (Toolpath.Strategy)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+
+MESSAGE INFO "Feature Pocket Profile Calculed successfully"
+
+BREAK
+
+// Finishing Profile
+
+
+CASE 4
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Profile.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Profile.ptf"
+
+ACTIVATE FEATUREGROUP $FtName
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT PAR 'Thickness'  $VarCurvethickness
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TPPAGE SWLeadIn
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADOUT COPY
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link[0].ApplyConstraints' '1'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "30"
+EDIT TPPAGE SWPocketProfile
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT TOOLPATH "#" CALCULATE
+FORM ACCEPT SFAreaClearance
+STRING TName = string(Tool.Name)  +  string (Toolpath.Strategy)
+RENAME TOOLPATH ; $TName
+PRINT = Toolpath.Name
+
+MESSAGE INFO "Finishing Profile Calculed successfully"
+
+BREAK
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+

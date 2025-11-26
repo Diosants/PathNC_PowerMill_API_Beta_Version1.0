@@ -1,0 +1,31 @@
+DIALOGS MESSAGE OFF
+DIALOGS ERROR OFF
+STRING ARRAY A[] = {"Select all tools", "Select specific tools or folder"}
+INT C = INPUT CHOICE $A "Select option?"
+if $c == 0 {
+INT toolNumberMax = INPUT "How many tools can you hold?"
+INT toolCount = 1
+FOREACH tool IN FOLDER('tool') {
+ACTIVATE TOOL $tool.Name
+EDIT TOOL $tool.Name NUMBER COMMANDFROMUI $toolCount
+$toolCount = $toolCount + 1
+IF $toolCount == $toolNumberMax + 1 {
+$toolCount = 1
+}
+}
+} elseif $c == 1 {
+Entity LIST Toollist = INPUT ENTITY MULTIPLE TOol "Select tool or folder"
+INT toolNumberMax = INPUT "How many tools can you hold?"
+INT toolCount = 1
+FOREACH tl IN Toollist {
+ACTIVATE TOOL $tl.Name
+EDIT TOOL $tl.Name NUMBER COMMANDFROMUI $toolCount
+$toolCount = $toolCount + 1
+IF $toolCount == $toolNumberMax + 1 {
+$toolCount = 1
+}
+}
+}
+
+DIALOGS MESSAGE ON
+DIALOGS ERROR ON

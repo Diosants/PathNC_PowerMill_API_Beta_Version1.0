@@ -1,0 +1,2 @@
+STRING Filename = ''
+$Filename = FILESELECT "Please select a pattern file"

@@ -1,0 +1,30 @@
+FUNCTION ToolNames(STRING FolderName, OUTPUT STRING LIST ToolNames) {
+
+    // loop over all the items in FolderName
+        FOREACH item IN folder(FolderName) {
+
+        // Define local working variables
+        STRING Name = ''
+        INT size = 0
+
+        // check that the item's tool exists
+        // it might not have been set yet
+        IF entity_exists(item.Tool) {
+            // get the name and add it to our list
+            $Name = item.Tool.Name
+            IF NOT member(FolderName, Name) {
+                $dummy = add_last(FolderName, Name)
+            }
+        }
+
+        // Check whether this item has a reference tool
+        // and that it has been set
+        IF active(item.ReferenceTool) AND entity_exists(item.ReferenceTool) {
+            // get the name and add it to our list
+            $Name = item.ReferenceTool.Name
+            IF NOT member(FolderName, Name) {
+                $dummy = add_last(FolderName, Name)
+            }
+        }
+    }
+}

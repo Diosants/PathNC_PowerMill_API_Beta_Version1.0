@@ -1,0 +1,9 @@
+ENTITY LIST $Selected_Toolpaths = INPUT ENTITY MULTIPLE 
+toolpath "which toolpaths do you want to check?" 
+STRING LIST ToolpathNames = INPUT ENTITY MULTIPLE TOOLPATH 
+"Select toolpaths to check" 
+
+FOREACH $tp in ToolpathNames { 
+ACTIVATE TOOLPATH $tp.Names 
+EDIT COLLISION APPLY 
+}

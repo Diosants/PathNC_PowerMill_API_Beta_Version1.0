@@ -1,0 +1,22 @@
+// Start a Ribbon Tab
+Services.StartRibbonEntry(guid_string, "uiCATEGORY", "MyRibbonTab");
+Services.SetRibbonEntryResource(guid_string, "uiLABELSTRING", "MyRibbonTab");
+
+// Create a Panel
+Services.StartRibbonEntry(guid_string, "uiPANEL", "MyPanel");
+
+// Create an icon button on that panel
+Services.StartRibbonEntry(guid_string, "uiICONBUTTON", "MyButton"));
+Services.SetRibbonEntryResource(guid_string, "uiBITMAP", "myIconFileName.png");
+Services.SetRibbonEntryResource(guid_string, "uiCOMMAND", "myCommand");
+Services.SetRibbonEntryResource(guid_string, "uiDYNAMICHELP", "MyHelp"));
+Services.SetRibbonEntryResource(guid_string, "uiSTATUSBARHELP", "myExtendedHelp"));
+
+// Finish creating the icon button
+Services.EndRibbonEntry();
+
+// Finished with the panel
+Services.EndRibbonEntry();
+
+// Finished with the ribbon tab
+Services.EndRibbonEntry();

@@ -1,0 +1,21 @@
+FUNCTION Main (INT Count) {
+     // Make sure that Count is at least two
+     IF Count < 2 {
+         $Count = 2
+     }
+
+     // Start with ten bottles
+     INT Bottles = 10
+
+     WHILE Bottles > 0 {
+         // Print the first line 'Count' number of times
+         CALL PrintBottles(Count, Bottles)
+         // Count down Bottles
+         $Bottles = $Bottles - 1
+         // Build the number of 'bottles_left' string
+         STRING bottles_left = "There will be " + string(Bottles) + " green bottles sitting on the wall"
+         // Print the last two lines
+         PRINT "If 1 green bottle should accidentally fall"
+         PRINT $bottles_left
+     }
+ }

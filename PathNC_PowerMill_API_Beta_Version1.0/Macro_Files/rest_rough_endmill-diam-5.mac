@@ -1,0 +1,40 @@
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia10" NEW
+ACTIVATE TOOLPATH "Rest_Rough_Dia10"
+COPY TOOLPATH "Rest_Rough_Dia10"
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia10_1" NEW
+RENAME Toolpath "Rest_Rough_Dia10_1" "Rest_Rough_Dia5"
+EXPLORER SELECT FOLDER "Tool\Cutter" NEW
+EXPLORER SELECT Toolpath "Toolpath\Rest_Rough_Dia5" NEW
+ACTIVATE TOOLPATH "Rest_Rough_Dia5"
+ACTIVATE TOOLPATH "Rest_Rough_Dia5" FORM TOOLPATH
+EDIT TOOLPATH "Rest_Rough_Dia5" RECYCLE
+EDIT TPPAGE TOOL
+ACTIVATE TOOL "ENDMILLR D6"
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "3"
+EDIT PAR 'Tolerance' ".05"
+EDIT TPPAGE SWRest
+EDIT STOCKMODEL 'STOCK' ACTIVATE INDEXED_STATE '3' 
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "4000"
+EDIT FRATE "2000"
+EDIT PRATE "2000"
+EDIT TOOLPATH "Rest_Rough_Dia5" CALCULATE
+FORM ACCEPT SFAreaClearance
+ACTIVATE TOOLPATH "Rest_Rough_Dia5" FORM TOOLPATH
+EDIT TOOLPATH "Rest_Rough_Dia5" RECYCLE
+EDIT TPPAGE SWRest
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWFinishAreaClr
+EDIT TPPAGE SWAreaFlatAClear
+EDIT PAR 'AreaClearance.Slicer.Flat.HoleFilterThreshold.Value' "6"
+EDIT TPPAGE SWToolRapidMv
+EDIT TPPAGE SWLeadsLinks
+EDIT TPPAGE SWLeadIn
+EDIT TPPAGE SWLink
+EDIT PAR 'Toolpath.Connections.Link.First.Constraint[0].Distance.Value' "10"
+EDIT TOOLPATH "Rest_Rough_Dia5" CALCULATE
+FORM ACCEPT SFAreaClearance

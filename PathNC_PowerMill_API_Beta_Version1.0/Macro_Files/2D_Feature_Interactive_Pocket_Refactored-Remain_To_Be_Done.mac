@@ -1,0 +1,238 @@
+// =============================================
+// FEATURE-BASED MACHINING AUTOMATION
+// Author: Diogenes Cardoso - DiogenixCAM
+// Description: Modular PowerMill macro for
+//              creating a feature and generating
+//              toolpaths using strategy templates.
+// =============================================
+
+RESET LOCALVARS
+
+
+// =========================
+// MAIN EXECUTION ENTRYPOINT
+// =========================
+FUNCTION MAIN()
+{
+   
+   CALL CreateRectPocketFeature()
+    CALL SetupBlockFromFeature()
+    CALL RunFeatureStrategy($FtName)
+
+   
+}
+
+
+
+// ==============================
+// FUNCTION: CreateRectPocketFeature
+// ==============================
+FUNCTION CreateRectPocketFeature()
+{
+  
+
+  //Get Feature group
+
+REAL  $VarLength = INPUT " Enter Length (X)"
+REAL  $VarWidth = INPUT " Enter Width (Y)"
+REAL  $VarHeight = INPUT " Enter Height (mm)"
+REAL  $VarCornerRadius = INPUT " Enter Corner Radius (mm)"
+
+CREATE FEATUREGROUP ;
+EXPLORER SELECT FeatureGroup "#" NEW
+ACTIVATE FEATUREGROUP "#" MODE FEATUREEDITOR START
+MODE FEATUREEDITOR MODE CREATE RECT_POCKET
+MODE FEATUREEDITOR EDIT NAME "#"
+MODE FEATUREEDITOR EDIT LENGTH $VarLength
+MODE FEATUREEDITOR EDIT WIDTH $VarWidth
+MODE FEATUREEDITOR EDIT HEIGHT  $VarHeight
+MODE FEATUREEDITOR EDIT CURVEPOSITION TOP
+MODE FEATUREEDITOR TAB CORNERS
+MODE FEATUREEDITOR EDIT CORNERRADIUS $VarCornerRadius
+MODE FEATUREEDITOR TAB FILLETS
+MODE FEATUREEDITOR TAB ORIGIN
+MODE FEATUREEDITOR EDIT WORKSPACE WORKPLANE
+MODE POSITION START
+MODE POSITION WORKSPACE WORKPLANE
+MODE POSITION PLANE XY
+MODE POSITION CARTESIAN X "0"
+MODE POSITION CARTESIAN Y "0"
+POSITION APPLY
+
+MODE FEATUREEDITOR TAB DIMENSIONS
+FORM APPLY FEEDIT
+FORM CANCEL FEEDIT
+MODE FEATUREEDITOR FINISH ACCEPT
+
+STRING $FtName = "RectPocket_X" + $VarLength + "_Y" + $VarWidth
+RENAME FEATUREGROUP "#" $FtName
+
+
+ 
+}
+
+
+
+// ==============================
+// FUNCTION: SetupBlockFromFeature
+// ==============================
+FUNCTION SetupBlockFromFeature()
+{
+    FORM BLOCK
+    EDIT BLOCK LIMITTYPE FEATURESET
+    EDIT BLOCK RESETLIMIT "0"
+    EDIT BLOCK RESET
+    BLOCK ACCEPT
+    ROTATE TRANSFORM TOP
+}
+
+
+
+// ==============================
+// FUNCTION: RunFeatureStrategy
+// ==============================
+FUNCTION RunFeatureStrategy(STRING FtName) {
+    // map the param (no $) to your usual $ variable
+    STRING $FtName = FtName
+
+    STRING LIST $FeatureOptions = { "Feature Area Clearance", "Pocket Area Clearance", "Finish Feature", "Pocket Profile", "Finish Profile"}
+
+    INT $opt = INPUT CHOICE $FeatureOptions "Select Feature Strategy:"
+    STRING $tool = INPUT ENTITY TOOL "Please select a tool"
+    REAL $step = INPUT "Enter Z Stepdown (positive)"
+    REAL $stock = INPUT "Enter Stock to leave per side"
+
+    SWITCH $opt
+    {
+        CASE 0 : CALL RunFeatureAreaClearance($FtName, $tool, $step, $stock)
+        CASE 1 : CALL RunPocketAreaClearance($FtName, $tool, $step, $stock)
+        CASE 2 : CALL RunFeatureFinish($FtName, $tool, $step, $stock)
+        CASE 3 : CALL RunPocketProfile($FtName, $tool, $step, $stock)
+        CASE 4 : CALL RunFinishProfile($FtName, $tool, $step, $stock)
+    }
+}
+
+
+// ==============================
+// STRATEGY FUNCTION 1
+// ==============================
+FUNCTION RunFeatureAreaClearance(STRING $FtName, STRING $tool, REAL $step, REAL $stock)
+{
+    MESSAGE INFO "Running Feature Area Clearance..."
+
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Area-Clearance.ptf" NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Area-Clearance.ptf"
+
+    ACTIVATE FEATUREGROUP $FtName
+    ACTIVATE TOOL $tool
+    EDIT PAR 'Thickness' $stock
+    EDIT ZHEIGHTS AUTOMATIC STEPDOWN $step
+    EDIT TOOLPATH "1" CALCULATE
+
+    CALL RenameToolpath()
+    MESSAGE INFO "Feature Area Clearance calculated successfully."
+}
+
+
+
+// ==============================
+// STRATEGY FUNCTION 2
+// ==============================
+FUNCTION RunPocketAreaClearance(STRING $FtName, STRING $tool, REAL $step, REAL $stock)
+{
+    MESSAGE INFO "Running Pocket Area Clearance..."
+
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Area-Clearance.ptf" NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Area-Clearance.ptf"
+
+    ACTIVATE FEATUREGROUP $FtName
+    ACTIVATE TOOL $tool
+    EDIT PAR 'Thickness' $stock
+    EDIT ZHEIGHTS AUTOMATIC STEPDOWN $step
+    EDIT TOOLPATH "1" CALCULATE
+
+    CALL RenameToolpath()
+    MESSAGE INFO "Pocket Area Clearance calculated successfully."
+}
+
+
+
+// ==============================
+// STRATEGY FUNCTION 3
+// ==============================
+FUNCTION RunFeatureFinish(STRING $FtName, STRING $tool, REAL $step, REAL $stock)
+{
+    MESSAGE INFO "Running Feature Finishing..."
+
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Finishing.ptf" NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Finishing.ptf"
+
+    ACTIVATE FEATUREGROUP $FtName
+    ACTIVATE TOOL $tool
+    EDIT PAR 'Thickness' $stock
+    EDIT PAR 'CutDirection' 'any'
+    EDIT ZHEIGHTS AUTOMATIC STEPDOWN $step
+    EDIT TOOLPATH "1" CALCULATE
+
+    CALL RenameToolpath()
+    MESSAGE INFO "Feature Finishing calculated successfully."
+}
+
+
+
+// ==============================
+// STRATEGY FUNCTION 4
+// ==============================
+FUNCTION RunPocketProfile(STRING $FtName, STRING $tool, REAL $step, REAL $stock)
+{
+    MESSAGE INFO "Running Pocket Profile..."
+
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Pocket-Profile.ptf" NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Pocket-Profile.ptf"
+
+    ACTIVATE FEATUREGROUP $FtName
+    ACTIVATE TOOL $tool
+    EDIT PAR 'Thickness' $stock
+    EDIT TOOLPATH "1" CALCULATE
+
+    CALL RenameToolpath()
+    MESSAGE INFO "Pocket Profile calculated successfully."
+}
+
+
+
+// ==============================
+// STRATEGY FUNCTION 5
+// ==============================
+FUNCTION RunFinishProfile(STRING $FtName, STRING $tool, REAL $step, REAL $stock)
+{
+    MESSAGE INFO "Running Finish Profile..."
+
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Profile.ptf" NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Profile.ptf"
+
+    ACTIVATE FEATUREGROUP $FtName
+    ACTIVATE TOOL $tool
+    EDIT PAR 'Thickness' $stock
+    EDIT TOOLPATH "1" CALCULATE
+
+    CALL RenameToolpath()
+    MESSAGE INFO "Finish Profile calculated successfully."
+}
+
+
+
+// ==============================
+// HELPER FUNCTION: RenameToolpath
+// ==============================
+FUNCTION RenameToolpath()
+{
+    STRING $tpName = Tool.Name + "_" + Toolpath.Strategy
+    RENAME TOOLPATH "1" $tpName
+    PRINT "Renamed toolpath: " + $tpName
+}

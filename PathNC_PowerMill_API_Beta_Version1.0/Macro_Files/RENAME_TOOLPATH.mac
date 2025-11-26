@@ -1,0 +1,20 @@
+Foreach tp in folder('toolpath') {
+//data of toolpath
+STRING $dir_tp = pathname(entity('Toolpath', $tp.Name))
+STRING LIST Tokens_tp = tokens($dir_tp,"\")
+
+//data of folder
+STRING $dir_folder = dirname(pathname(entity('Toolpath', $tp.Name)))
+STRING LIST Tokens_folder = tokens($dir_folder,"\")
+
+if size(Tokens_folder) > 1 {
+//if toolpath inside a folder
+string FirstLeterFolder = substring($Tokens_folder[$size(Tokens_folder)-1] , 0 , 1)
+string new_name = FirstLeterFolder + $Tokens_tp[$size(Tokens_tp)-1]
+RENAME Toolpath $tp $new_name
+} else {
+//if toolpath not inside a folder
+string new_name = "tp" + $Tokens_tp[$size(Tokens_tp)-1]
+RENAME Toolpath $tp $new_name
+}
+}

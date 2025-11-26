@@ -1,0 +1,28 @@
+
+
+
+
+// Select the imported model
+EDIT MODEL "P2PLATE" SELECT ALL
+
+
+//; Form a block (default size around the model)
+FORM BLOCK
+
+//; Reset the block dimensions
+EDIT BLOCK RESET
+
+//; Accept the block settings
+BLOCK ACCEPT
+
+//; Create a boss feature based on the selected model
+CREATE FEATURE BOSS AUTO
+
+//; Customize the boss feature (optional)
+EDIT FEATURE BOSS HEIGHT 10 ; Set the height of the boss to 10mm
+EDIT FEATURE BOSS RADIUS 5 ; Set the radius of the boss to 5mm
+
+//; Accept the boss feature
+FEATURE ACCEPT
+
+//; End macro

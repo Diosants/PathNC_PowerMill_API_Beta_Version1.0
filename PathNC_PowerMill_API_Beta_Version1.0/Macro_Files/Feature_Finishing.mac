@@ -1,0 +1,27 @@
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Finishing.ptf"
+
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWFeatureFin
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT PAR 'CutDirection' 'any' EDIT PAR 'AreaClearance.Raster.Style' 'two_way_joined'
+EDIT PAR 'Thickness' "0"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+EDIT TPPAGE SWCutDistWall
+EDIT PAR 'CutDistances.Radial.Extent' 'number_of_cuts'
+EDIT PAR 'CutDistances.Radial.NumberOfCuts' "1"
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' "1"
+EDIT TPPAGE SWCutDistFlat
+EDIT PAR 'CutDistances.Axial.Extent' 'number_of_cuts'
+EDIT PAR 'CutDistances.Axial.NumberOfCuts' "1"
+EDIT PAR 'ShallowStepover.Active' '1' EDIT PAR 'ShallowStepover.Value' "5"
+EDIT TPPAGE SWAreaFilterAClear
+EDIT TPPAGE SWLeadsLinks
+EDIT TOOLPATH "1" CALCULATE
+FORM ACCEPT SFFeatureFin
+

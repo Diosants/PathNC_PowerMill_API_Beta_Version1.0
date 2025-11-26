@@ -1,0 +1,128 @@
+STRING RNM = ' '
+INT CNT = 0
+
+
+// CYCLES THROUGH ALL SELECTED PROGRAMS AND CLEARS THE NAME AND ASSIGNS A NUMBER
+ FOREACH $Selected_Toolpath IN (explorer_selected_entities()) {
+    // Exit if the selected entities are not Toolpaths
+    IF $Selected_Toolpath.RootType != "toolpath" {
+        BREAK
+  }
+    MACRO APPERROR CONTINUE
+
+// CLEARS THE TOOLPATH NAME AND ASSIGNS EACH ONE A NUMBER
+IF CNT < 10 {
+		$RNM = "0" + $CNT + "-" 
+	} ELSE {
+		$RNM = $CNT + "-"
+	}
+	
+	RENAME Toolpath $Selected_Toolpath $RNM
+	$CNT = $CNT + 1
+	}
+ 
+	// DETERMINS TOOL DIAMETER AND ADDS THAT TO THE TP NAME
+	  
+	 FOREACH $Selected_Toolpath IN (explorer_selected_entities()) {
+		// Exit if the selected entities are not Toolpaths
+		IF $Selected_Toolpath.RootType != "toolpath" {
+			BREAK
+	  }
+		MACRO APPERROR CONTINUE
+	ACTIVATE TOOLPATH $Selected_Toolpath
+
+	// TOOLPATH NAME VARIABLE AND TOOLNUMBER VARIABLE
+	STRING TPNAME = ENTITY('toolpath','').name
+	INT TOONUM = ENTITY('toolpath','').tool.number
+	STRING MISSEDTOOLNAME = ENTITY('tool','').name
+	STRING TOOLNAME = ' '
+	IF $TOONUM < 10 {
+	$TOOLNAME = "T00" + $TOONUM + "-"
+	} ELSE {
+	$TOOLNAME = "T0" + $TOONUM + "-"
+	}
+	IF $TOONUM == 0 {
+	MESSAGE INFO "YOU FORGOT TO ADD A TOOLNUMBER TO TOOL... $MISSEDTOOLNAME , ADD TOOLNUMBER AND RESTART MACRO!"
+	RENAME TOOLPATH ; "NO TOOL NUMBER"
+	BREAK
+	}
+	
+	// TOOL DIAMETER VALUES
+	STRING TOODIA = ENTITY('tool','').Diameter
+	REAL TOOREA = $TOODIA
+	REAL TOORND = ROUND ($TOOREA, 4)
+	REAL TOOMET = $TOORND / 0.03937
+	REAL METRND = ROUND ($TOOMET, 2)
+	INT METINT = ROUND ($METRND, 1) 
+	// TOOLNAME VARIABLES
+	
+	
+	// STOCK VARIABLES	
+	REAL THICC = Toolpath.Thickness
+	STRING STOCK = ' '
+	
+	IF $THICC >= 0.015 {
+	$STOCK = "ROUGH"
+	}
+	IF $THICC < 0.015 AND $THICC >= 0.001 {
+	$STOCK = "SEMI"
+	}
+	IF $THICC < 0.001 {
+	$STOCK = "FINISH"
+	}
+	
+	REAL FLTTHICC = Toolpath.AxialThickness
+	STRING FLTSTOCK = ' '
+	
+	IF $FLTTHICC >= 0.015 {
+	$FLTSTOCK = "ROUGH"
+	}
+	IF $FLTTHICC < 0.015 AND $THICC >= 0.001 {
+	$FLTSTOCK = "SEMI"
+	}
+	IF $FLTTHICC < 0.001 {
+	$FLTSTOCK = "FINISH"
+	}
+		
+		// NAME STRINGS BUILT FROM VARIABLES
+		STRING NEWNAME = $TPNAME + $TOOLNAME
+		
+		STRING CHAMFERNAME = $NEWNAME + "CHAMFER"
+		STRING SCRIBENAME = $NEWNAME + "SCRIBE"
+		STRING DRILLNAME = $NEWNAME + $METRND + "MM_DRILL"
+		STRING TAPNAME = $NEWNAME + $METINT + "MM_TAP"
+		STRING HELINAME = $NEWNAME + $METINT + "MM_HELICAL-" + $STOCK
+		STRING RASTERFLAT = $NEWNAME + $METINT + "MM_FLAT-" + $FLTSTOCK
+		STRING OFFSETFLAT = $NEWNAME + $METINT + "MM_OFFSETFLAT-" + $FLTSTOCK
+				
+		// DECIDES WHAT TO NAME THE TOOLPATH BASED ON DIFFERENT TOOLPATH VARIABLES
+		
+		IF Strategy == "chamfer" {
+		$NEWNAME = $CHAMFERNAME
+				
+		} ELSEIF Tool.Type == "taper_tipped" {
+		$NEWNAME = $SCRIBENAME
+		
+		} ELSEIF Strategy == "drill" {
+		IF toolpath.Drill.Type == "helical" {
+		$NEWNAME = $HELINAME
+			} ELSEIF toolpath.Drill.Type == 'tap_2' {
+			$NEWNAME = $TAPNAME
+				} ELSE {
+				$NEWNAME = $DRILLNAME
+				} 
+		} ELSEIF Strategy == "raster_flat" {
+		$NEWNAME = $RASTERFLAT
+		
+		} ELSEIF Strategy == "offset_flat" {
+		$NEWNAME = $OFFSETFLAT
+		
+		} ELSEIF $TOOREA == 2.0 {
+		$NEWNAME = $NEWNAME + "2_" + $STOCK
+				
+		} ELSE {
+		$NEWNAME = $NEWNAME + $METINT + "MM-" + $STOCK
+		}
+		RENAME TOOLPATH ; $NEWNAME
+}
+MESSAGE INFO "TOOLPATHS RENAMED"

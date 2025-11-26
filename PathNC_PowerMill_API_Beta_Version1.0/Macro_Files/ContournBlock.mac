@@ -1,0 +1,170 @@
+RESET LOCALVARS
+
+
+
+
+//  Variables
+REAL  $VarBlockExpansion    = INPUT "Enter Block  Expansion (Must be bigger than Tool Radius)"
+REAL  $VarBlockDepth     = INPUT "Enter Block Depth (Must be Negative)"
+
+
+
+
+
+
+
+
+
+///
+
+ROTATE TRANSFORM TOP
+//  Get Pattern From Block First
+
+FORM BLOCK
+DELETE BLOCK
+EDIT BLOCK RESETLIMIT "0"
+EDIT BLOCK RESET
+BLOCK ACCEPT
+REAL xMinus = $toolpath.Block.Limits.XMin
+REAL yMinus = $toolpath.Block.Limits.YMin
+REAL xPlus = $toolpath.Block.Limits.XMax
+REAL yPlus = $toolpath.Block.Limits.YMax
+
+CREATE PATTERN ; EDIT PATTERN ; CURVEEDITOR NOGUI START
+CURVEEDITOR MODE RECTANGLE
+MODE COORDINPUT COORDINATES $xMinus $yMinus 0
+MODE COORDINPUT COORDINATES $xPlus $yPlus 0
+CURVEEDITOR FINISH ACCEPT
+EXPLORER SELECT Pattern "Pattern\#" NEW
+STRING BName = "Pattern_From_Block"
+RENAME  Pattern ; $BName
+PRINT =  Pattern.Name
+
+//  End Macro Gep Pattern From Block
+
+
+
+CREATE SETUP ; FORM SETUP
+SELECT WORKPAGE SETUP STPSTOCK
+RENAME SETUP EVAL $form_entity('setup') "Cavity_Plate"
+SELECT WORKPAGE SETUP STPWORKPLANE
+EDIT SETUP EVAL $form_entity('setup') WORKPLANE $VarSelectedWorkPlane //  DAR OPCAO DE ESCOLHER O WORKPLANE
+SELECT WORKPAGE SETUP STPSTOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK COORDINATE WORKPLANE
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMAX LOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESETLIMIT $VarBlockExpansion 
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESET
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMIN UNLOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMIN $VarBlockDepth
+SELECT WORKPAGE SETUP STPCONNECT
+EDIT SETUP LEADS RAISEFORM
+EDIT SETUP SAFEAREA SIZE  "10"
+EDIT SETUP SAFEAREA PLUNGE_SIZE  "5"
+EDIT SETUP SAFEAREA APPLY
+PROCESS SETUP LEADS
+LEADS CANCEL
+FORM ACCEPT SETUP
+
+
+
+// Pick WorkPlane
+
+STRING $VarSelectedWorkPlane = INPUT ENTITY WORKPLANE "Please select Workplane."
+
+MACRO PAUSE " Please, Select the Tool"
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Please select a tool from the list."
+REAL  $VarToolDepth = INPUT  " Enter Z Stepdown (Must be Positive)" 
+REAL  $VarCurvethickness = INPUT  " Enter Stock to leave per side " 
+
+
+// Define options
+STRING LIST $CutDirectionOptions = {"Conventional", "Climb", "Any"}
+
+// Ask the user which direction to use
+INT $CutDirectionSelected = INPUT CHOICE $CutDirectionOptions "Select Cut Direction:"
+
+// Apply user's selection to the parameter
+SWITCH $CutDirectionSelected {
+    CASE 0
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'conventional'
+    CASE 1
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'climb'
+    CASE 2
+        EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+}
+
+
+
+
+EXPLORER SELECT Setup "Setup\Cavity_Plate" NEW
+ACTIVATE SETUP "Cavity_Plate" FORM STRATEGYSELECTOR
+
+ //  2D Curve Strategy  - Curve Profile
+STRATEGYSELECTOR STRATEGY "Curve-Machining/2D-Curve-Profile.003.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/2D-Curve-Profile.003.ptf"
+
+RENAME TOOLPATH "#" "Rough_Block_Square"
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWBlock
+EDIT TOOLPATH ; PARENTSTOCK YES
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'CurveThickness' $VarCurvethickness
+EDIT PAR 'ZLimits.Minimum' $VarBlockDepth  
+EDIT PAR 'Tolerance' ".1"
+EDIT TPPAGE SWCutDistVerHor
+EDIT TPPAGE SWCurveProfile
+EDIT PAR 'AreaClearance.Profile.CutDirection' $CutDirectionOptions
+EDIT PAR 'Pattern' "Pattern_From_Block"
+EDIT PATTERN_DECORATION EDIT_MODE
+MACRO PAUSE " Select Machine Side"
+EDIT PATTERN_DECORATION SHOW_MODE
+
+EDIT TPPAGE SWCutDistVerHor
+EDIT PAR 'CutDistances.Axial.Extent' 'limits'
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' $VarToolDepth
+
+
+// Leads in/ Out
+EDIT TOOLPATH LEADS LEADIN HARC
+EDIT TOOLPATH LEADS LEADIN ANGLE "90"
+EDIT TOOLPATH LEADS LEADIN LRAD "6"
+EDIT TOOLPATH LEADS LEADOUT COPY
+
+
+//  Links
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "20"
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'safe'
+
+
+
+EDIT TOOLPATH "Rough_Block_Square" CALCULATE
+FORM ACCEPT SFCurveProfile
+//UNDRAW Setup "Cavity_Plate"
+
+//  Reset Block to original Size
+FORM BLOCK
+EDIT BLOCK ZMIN UNLOCK
+EDIT BLOCK ZMAX UNLOCK
+EDIT BLOCK ZLEN UNLOCK
+EDIT BLOCK RESET
+BLOCK ACCEPT
+
+// Reset Setup Block
+FORM SETUP "Cavity_Plate"
+SELECT WORKPAGE SETUP STPSTOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMIN UNLOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZMAX UNLOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK ZLEN UNLOCK
+EDIT SETUP EVAL $form_entity('setup') STOCK BLOCK RESET
+FORM ACCEPT SETUP
+
+
+ROTATE TRANSFORM ISO1
+DELETE SCALE

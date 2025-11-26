@@ -1,0 +1,112 @@
+DELETE MODEL SELECTED
+
+EDIT BLOCKTYPE BOX
+EDIT BLOCK ALL UNLOCK 
+EDIT BLOCK RESETLIMIT "0"	
+DELETE WORKPLANE ALL
+
+STRING LIST models = {}
+FOREACH md IN FOLDER('model') {
+     IF position($md.name, "Planes") == -1 {
+          INT k = add_last($models, $md.name)
+     }
+}
+STRING output_model = ''
+IF size($models) == 1 {
+     $output_model = $models[0]
+} ELSE {
+     $output_model = INPUT ENTITY MODEL "Choose model"
+}
+STRING $block = $output_model
+STRING $New_Workplane_Name = new_entity_name('workplane')
+STRING Msg = "Choose a horizontal surface and click Resume"
+MODE WORKPLANE_CREATE ; INTERACTIVE GEOMETRY
+STATUS EDITING_PLANE XY
+MACRO PAUSE $Msg
+ACTIVATE WORKPLANE "1"
+EDIT BLOCK RESET
+FORM BLOCK
+EDIT BLOCK COORDINATE WORLD
+EDIT BLOCK RESET
+BLOCK ACCEPT
+MODE WORKPLANE_CREATE ; INTERACTIVE BLOCK
+MACRO PAUSE "Choose a point on the block"
+FORM MODELTRANS EDIT MODEL $block INTERACTIVE
+ACTIVATE WORKPLANE "2"
+TRANSFORM TYPE WORLD TRANSFORM MODEL $block
+MODELTRANS ACCEPT
+FORM BLOCK
+EDIT BLOCK COORDINATE NAMED
+EDIT BLOCK NAMEDWORKPLANE "2"
+EDIT BLOCK RESET
+BLOCK ACCEPT
+DELETE WORKPLANE ALL
+FORM BLOCK
+EDIT BLOCK RESET
+BLOCK ACCEPT
+ROTATE TRANSFORM ISO1\r
+
+BOOL alignment = FALSE
+$alignment = QUERY "Is the part alignment OK?"
+IF $alignment {
+  MESSAGE INFO "Alignment complete"
+  MACRO ABORT
+} 
+ROTATE TRANSFORM ISO1
+STRING Msg2 = "Select a surface to define the angle of the counterclockwise rotation along the Z axis"
+MACRO PAUSE $Msg2
+
+//calculate angle and transform along z axis
+EDIT BLOCK RESET
+
+REAL $x = ($block.limits.xmax-$block.limits.xmin)
+REAL $y = ($block.limits.ymax-$block.limits.ymin)
+REAL $degrees = ATAN($y/$x)
+EDIT MODEL ALL DESELECT ALL
+TRANSFORM RESET TRANSFORM TYPE ROTATEZ TRANSFORM ANGLE 
+$degrees 
+TRANSFORM MODEL ALL
+
+//Calculate Block
+EDIT BLOCK RESET
+
+// Half Block Width
+REAL HalfWidthX = ($block.limits.xmax-$block.limits.xmin)/2
+REAL HalfWidthY = ($block.limits.ymax-$block.limits.ymin)/2
+$HalfWidthX = ROUND ($HalfWidthX, 6)
+$HalfWidthY = ROUND ($HalfWidthY, 6)
+
+//Min Block Width
+REAL Xmin = ($block.limits.xmin)
+REAL Ymin = ($block.limits.ymin)
+$Xmin = ROUND ($Xmin, 6)
+$Xmin = (0-$Xmin)
+$Ymin = ROUND (Ymin, 6)
+$Ymin = (0-$Ymin)
+
+//Value to be moved
+REAL MoveX = ($Xmin-$HalfWidthX)
+REAL MoveY = ($Ymin-$HalfWidthY)
+
+//Move To Center X
+TRANSFORM RESET TRANSFORM TYPE MOVE TRANSFORM MOVEX
+$MoveX
+TRANSFORM MODEL ALL
+EDIT BLOCK RESET
+
+//Move To Center Y
+TRANSFORM RESET TRANSFORM TYPE MOVE TRANSFORM MOVEY
+$MoveY
+TRANSFORM MODEL ALL
+EDIT BLOCK RESET
+REFRESH VIEWMILL RESIZEVIEW
+REAL $roundxmin = $block.limits.xmin
+REAL $roundxmax = $block.limits.xmax
+REAL $roundymin = $block.limits.ymin
+REAL $roundymax = $block.limits.ymax
+
+$roundxmin = ROUND ($block.limits.xmin, 4)
+$roundxmax = ROUND ($block.limits.xmax, 4)
+$roundymin = ROUND ($block.limits.ymin, 4)
+$roundymax = ROUND ($block.limits.ymax, 4)
+MESSAGE INFO "Model has been moved to the center of the workplane!" +CRLF+ "X min: $roundxmin X max: $roundxmax " +CRLF+ "Y min: $roundymin Y max: $roundymax "

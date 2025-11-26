@@ -1,0 +1,13 @@
+STRING ARRAY Opts[] = {"Gouge check only", "Colllision check only","Gouge and Collision check"} 
+INT C = INPUT CHOICE $Opts "Pick an option"
+SWITCH $C {
+CASE 0:
+MACRO "Gouge_Check.mac"
+BREAK
+CASE 2:
+MACRO "Gouge_Check.mac"
+// Intended fall through to next command
+CASE 1:
+MACRO "Collision_Check.mac"
+BREAK
+}

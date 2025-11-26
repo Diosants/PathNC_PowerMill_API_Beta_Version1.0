@@ -1,0 +1,33 @@
+
+
+RESET LOCALVARS
+
+// Ask user for tool parameters
+REAL toolDia      = INPUT "Enter Tool Diameter (mm)"
+REAL toolLength   = INPUT "Enter Tool Total Length (mm)"
+REAL toolOverhang = INPUT "Enter Tool Overhang (mm)"
+
+// Create a new Endmill
+CREATE TOOL ; DRILL FORM TOOL
+
+// Apply user values
+EDIT TOOL "#" DIAMETER  $toolDia
+EDIT TOOL "#" LENGTH    $toolLength
+EDIT TOOL "#" OVERHANG  $toolOverhang
+
+// Fixed holder definition
+EDIT TOOL "#" HOLDER_COMPONENT ADD
+EDIT TOOL "#" HOLDER_COMPONENT UPPERDIA "40"
+EDIT TOOL "#" HOLDER_COMPONENT LOWERDIA "25"
+EDIT TOOL "#" HOLDER_COMPONENT LENGTH   "50"
+
+//
+ACTIVATE TOOL "#"
+STRING TName = string(Tool.Type) + " Diam: " + string(Tool.Diameter)
+RENAME TOOL ; $TName
+PRINT = Tool.Name
+TOOL ACCEPT
+
+
+// Notify user
+MESSAGE INFO " Tool created successfully"

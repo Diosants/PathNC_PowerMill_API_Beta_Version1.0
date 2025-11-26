@@ -1,0 +1,50 @@
+// PowerMill Macro: Capture Model Views and Save to Project Folder (PICS)
+
+// Clear unnecessary visuals
+UNDRAW TOOLPATH ALL
+UNDRAW BOUNDARY ALL
+UNDRAW PATTERN ALL
+UNDRAW FEATURESET ALL
+UNDRAW TOOL ALL
+UNDRAW FEATURESET ALL
+UNDRAW TRANSFORM
+
+// Get path
+STRING OUTPUT_FOLDER = project_pathname(0) + "/PICS"
+
+// Ensure the folder exists
+IF NOT dir_exists($OUTPUT_FOLDER) {
+	MKDIR $OUTPUT_FOLDER
+}
+
+// Capture and save each view
+ROTATE TRANSFORM TOP
+STRING $filenm = $OUTPUT_FOLDER + "/TOP.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+ROTATE TRANSFORM FRONT
+$filenm = $OUTPUT_FOLDER + "/FRONT.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+ROTATE TRANSFORM BACK
+$filenm = $OUTPUT_FOLDER + "/BACK.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+ROTATE TRANSFORM LEFT
+$filenm = $OUTPUT_FOLDER + "/LEFT.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+ROTATE TRANSFORM RIGHT
+$filenm = $OUTPUT_FOLDER + "/RIGHT.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+ROTATE TRANSFORM BOTTOM
+$filenm = $OUTPUT_FOLDER + "/BOTTOM.jpg"
+KEEP BITMAP WHITEBG ${filenm} YES
+
+// Display message
+string $msg = "All images saved in " + $OUTPUT_FOLDER
+Message info $msg
+ole fileaction "open" $OUTPUT_FOLDER
+
+RETURN

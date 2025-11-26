@@ -1,0 +1,18 @@
+FUNCTION CleanBoundary(STRING name) {
+    REAL offset = 1 mm
+    REAL diam = entity('boundary'; name).Tool.Diameter
+
+    // Delete segments smaller than tool diameter
+    EDIT BOUNDARY $name SELECT AREA LT $diam
+    DELETE BOUNDARY $name SELECTED
+
+    // Offset outwards and inwards to smooth boundary
+    EDIT BOUNDARY $name OFFSET $offset
+    EDIT BOUNDARY $name OFFSET ${-offset}
+}
+
+FUNCTION Main() {
+    FOREACH bou IN folder('Boundary') {
+        CALL CleanBoundary(bou.Name)
+    }
+}

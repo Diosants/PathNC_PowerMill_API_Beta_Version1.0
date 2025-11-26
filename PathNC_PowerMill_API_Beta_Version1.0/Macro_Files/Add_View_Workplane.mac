@@ -1,0 +1,95 @@
+RESET LOCALVARS
+
+FUNCTION MAIN() {
+    BOOL $b = 1
+    
+    WHILE $b {
+        CALL CreateView()
+        $b = QUERY "Create another view workplane?"
+    }
+}
+
+FUNCTION CreateView() {
+    // Ask the user to type the view name
+    STRING $viewName = INPUT "Type view name (Front, Back, Left, Right):"
+
+    // Reset model selection
+    ROTATE TRANSFORM TOP
+    EDIT MODEL ALL SELECT ALL
+
+    // Apply rotation based on input
+    IF $viewName == "Front" {
+	MACRO PAUSE " Your Main WorkPlane must be active"
+       ACTIVATE WORKPLANE "OP1"
+        ROTATE TRANSFORM FRONT
+    }
+    IF $viewName == "Back" {
+MACRO PAUSE " Your Main WorkPlane must be active"
+       ACTIVATE WORKPLANE "OP1"
+        ROTATE TRANSFORM BACK
+    }
+    IF $viewName == "Left" {
+MACRO PAUSE " Your Main WorkPlane must be active"
+       ACTIVATE WORKPLANE "OP1"
+        ROTATE TRANSFORM LEFT
+    }
+    IF $viewName == "Right" {
+MACRO PAUSE " Your Main WorkPlane must be active"
+       ACTIVATE WORKPLANE "OP1"
+        ROTATE TRANSFORM RIGHT
+    }
+
+    // Invalid input check
+    IF $viewName != "Front" AND $viewName != "Back" AND $viewName != "Left" AND $viewName != "Right" {
+        MESSAGE INFO "Invalid input. Please type Front, Back, Left, or Right."
+        RETURN
+    }
+
+    // Create new workplane at block center
+    MODE WORKPLANE_CREATE ; INTERACTIVE BLOCK
+    MACRO PAUSE "Select the center of the block"
+
+    EXPLORER SELECT Workplane "Workplane\#" NEW
+    MODE WORKPLANE_EDIT START "#"
+
+    // Twist rules
+    IF $viewName == "Front" {
+        MODE WORKPLANE_EDIT TWIST X
+        MODE WORKPLANE_EDIT TWIST 90
+        WPETWIST ACCEPT
+    }
+    IF $viewName == "Back" {
+        MODE WORKPLANE_EDIT TWIST X
+        MODE WORKPLANE_EDIT TWIST 270
+        WPETWIST ACCEPT
+        MODE WORKPLANE_EDIT TWIST Z
+        MODE WORKPLANE_EDIT TWIST 180
+        WPETWIST ACCEPT
+    }
+    IF $viewName == "Left" {
+        MODE WORKPLANE_EDIT TWIST Y
+        MODE WORKPLANE_EDIT TWIST 270
+        WPETWIST ACCEPT
+        MODE WORKPLANE_EDIT TWIST Z
+        MODE WORKPLANE_EDIT TWIST -90
+        WPETWIST ACCEPT
+    }
+    IF $viewName == "Right" {
+        MODE WORKPLANE_EDIT TWIST Y
+        MODE WORKPLANE_EDIT TWIST 90
+        WPETWIST ACCEPT
+        MODE WORKPLANE_EDIT TWIST Z
+        MODE WORKPLANE_EDIT TWIST 90
+        WPETWIST ACCEPT
+    }
+
+    MODE WORKPLANE_EDIT FINISH ACCEPT
+
+    // Rename and activate
+    STRING $finalName = $viewName + " View"
+    RENAME Workplane "#" $finalName
+    ACTIVATE WORKPLANE $finalName
+
+    ROTATE TRANSFORM TOP
+    ROTATE TRANSFORM ISO1
+}

@@ -1,0 +1,47 @@
+FUNCTION MAIN() { 
+
+    // Remember the name of the currently active featureset
+    STRING ActiveFeatureset = ''
+    IF ENTITY_EXISTS($entity('featureset', '')) {
+        $ActiveFeatureset = $entity('featureset','').name
+    } ELSE {
+        MACRO PAUSE "Please activate a featureset."
+    }
+
+    // Sort active featureset by diameter
+    EDIT FEATURESET $ActiveFeatureset SORT "diameter"
+
+    // Initiate some variables
+    REAL LastFeatDia = 0
+    STRING LastFeatName = ""
+    STRING newfset = ""
+    STRING fsetName = ""
+    STRING ActiveFeat = ""
+
+    // Loop through active featureset creating new featuresets upon encountering a different diameter
+    // If diameter is the same as the last diameter, add to that featureset
+    FOREACH $feat IN components($entity('featureset','')) {
+        EDIT FEATURESET ; DESELECT ALL
+        EDIT FEATURESET ; SELECT $feat.name
+        REAL dia = $feat.Diameter
+        $ActiveFeat = "Featureset\"+$ActiveFeatureset+"\"+$feat.name
+        IF $LastFeatDia == $dia {
+            ACTIVATE Featureset $fsetName
+            EDIT FEATURESET $newfset MOVE_FEATURE ITEM $ActiveFeat AFTER $LastFeatName
+        } ELSE {
+            $newfset = "Featureset\"+$dia+" Holes"
+            $fsetName = $dia+" Holes"
+            $LastFeatName = $feat.name
+            IF ENTITY_EXISTS($entity('featureset', $fsetName)) {
+                $fsetName = NEW_ENTITY_NAME('featureset', $fsetName)
+            }
+            CREATE FEATURESET $fsetName
+            EDIT FEATURESET $newfset MOVE_FEATURE ITEM $ActiveFeat FIRST
+        }
+        $LastFeatDia = $dia
+        ACTIVATE Featureset $ActiveFeatureset
+    }
+
+    // Delete original featureset
+    DELETE FEATURESET $ActiveFeatureset
+}

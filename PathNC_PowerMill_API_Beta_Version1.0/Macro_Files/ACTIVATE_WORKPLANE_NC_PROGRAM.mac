@@ -1,0 +1,57 @@
+ENTITY LIST $Selected_ncprogram = INPUT ENTITY MULTIPLE ncprogram "Selecione Programa"
+EXPLORER SELECT NCPROGRAM root
+FOREACH $nc in $Selected_ncprogram {
+	STRING $full_path = pathname('ncprogram',$nc.name)
+	EXPLORER SELECT NCProgram $full_path TOGGLE
+}
+
+FOREACH ent IN $Selected_ncprogram {
+	STRING $SNAP_ncp = project_pathname(0) + "\SetupSheets_files\snapshots\ncp-x" + $entity("ncprogram", $ent.Name).id + ".png"
+	IF file_exists($SNAP_ncp) {
+		DELETE FILE $SNAP_ncp
+	}
+	DIALOGS MESSAGE OFF
+	//DEACTIVATE WORKPLANE
+	//ACTIVATE WORKPLANE FROMENTITY NCPROGRAM $ent.Name
+	DIALOGS MESSAGE ON
+	EDIT MODEL ALL DESELECT ALL
+	DEACTIVATE NCPROGRAM
+	ROTATE TRANSFORM TOP
+	UNDRAW NCPROGRAM ALL
+	DEACTIVATE TOOLPATH
+	UNDRAW TOOLPATH ALL
+	DEACTIVATE TOOL
+	UNDRAW TOOL ALL
+	DEACTIVATE BOUNDARY
+	UNDRAW BOUNDARY ALL
+	DEACTIVATE PATTERN
+	UNDRAW PATTERN ALL
+	DEACTIVATE FEATURESET
+	UNDRAW FEATURESET ALL
+	UNDRAW AXES
+	UNDRAW BLOCK
+	FOREACH item IN components($ent) {
+		IF lcase(item.RootType) == "nctoolpath" {
+			IF NOT ERROR($entity("Toolpath", $item.Name).Workplane) {
+				STRING $wpName = $entity("Toolpath", $item.Name).Workplane.Name
+				ACTIVATE WORKPLANE $wpName
+				ROTATE TRANSFORM TOP
+				MACRO PAUSE "Posicione a vista"
+				//DRAW NCPROGRAM_PATHS $ent.Name
+				STRING $cmd = 'KEEP SNAPSHOT NCPROGRAM "' + $ent.Name + '" CURRENT'
+				DOCOMMAND $cmd
+				UNDRAW NCPROGRAM_PATHS $ent.Name
+				GRAPHICS UNLOCK
+			} ELSE {
+				DEACTIVATE WORKPLANE
+				ROTATE TRANSFORM TOP
+				MACRO PAUSE "Posicione a vista"
+				DRAW NCPROGRAM_PATHS $ent.Name
+				STRING $cmd = 'KEEP SNAPSHOT NCPROGRAM "' + $ent.Name + '" CURRENT'
+				DOCOMMAND $cmd
+				UNDRAW NCPROGRAM_PATHS $ent.Name
+			}
+			BREAK
+		}
+	}
+}

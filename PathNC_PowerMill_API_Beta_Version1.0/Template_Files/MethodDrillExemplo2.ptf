@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!--PMILLMETHOD 1.0 http://www.powermill.com/xml/PmillMethodSchema.xml -->
+<methods xmlns="x-schema:./PMillMethodSchema.xml">
+  
+
+<!---->
+  <method name="CENTER">
+    <selection>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="single_peck"/>
+      <string_value name="label" value="CenterDrill"/>
+      <string_value name="Tool" value="HSS_DRILL_DIA_6"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="FeedRate.Cutting.Value" value="50"/>
+      <string_value name="SpindleSpeed.Value" value="1000"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Drill.GougeCheck" value="1"/>
+      <string_value name="Drill.TopType" value="block"/>
+      <string_value name="Drill.DepthType" value="centre"/>
+      <string_value name="Drill.Split" value="0"/>
+      <string_value name="Method.SplitTolerance" value="0"/>
+      <string_value name="Coolant.Value" value="flood"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="2"/>
+      <string_value name="Drill.Depth.Value" value="5"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Drill.Thickness" value="0"/>
+      <string_value name="Thickness" value="0"/>
+      <string_value name="AxialThickness" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="through hole">
+    <selection>
+      <string_value name="colour" value="51,51,51"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="deep_drill"/>
+      <string_value name="label" value="Deep Drill"/>
+      <string_value name="Drill.Split" value="1"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.GougeCheck" value="0"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="2"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Drill.TopType" value="block"/>
+      <string_value name="Drill.DepthType" value="thru"/>
+      <string_value name="Drill.UseCycles" value="1"/>
+      <string_value name="Drill.PeckDepth.Value" value="2"/>
+      <string_value name="Drill.Thickness" value="1"/>
+    </drill_operation>
+  </method>
+  <method name="Pre-Drill-Green-Pink">
+    <selection>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="deep_drill"/>
+      <string_value name="label" value="Deep Drill"/>
+      <string_value name="Tool" value="HSS_DRILL_DIA_25"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="thru"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="1"/>
+      <string_value name="Drill.PeckDepth.Value" value="2"/>
+    </drill_operation>
+  </method>
+  <method name="Rough-Green-Pink-Holes">
+    <selection>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="CUTTER D 25"/>
+      <string_value name="Drill.Thickness" value=".5"/>
+      <string_value name="Drill.TopType" value="block"/>
+      <string_value name="Drill.DepthType" value="thru"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="2000"/>
+      <string_value name="SpindleSpeed.Value" value="2500"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="Rough-white">
+    <selection>
+      <string_value name="colour" value="255,255,255"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="CUTTER D 25"/>
+      <string_value name="Drill.Thickness" value=".5"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="FeedRate.Cutting.Value" value="2000"/>
+      <string_value name="Drill.PeckDepth.Value" value="2.5"/>
+      <string_value name="SpindleSpeed.Value" value="2500"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="Semi-Green-Pink-Holes">
+    <selection>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="CUTTER D 25"/>
+      <string_value name="Drill.Thickness" value=".15"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="3500"/>
+      <string_value name="SpindleSpeed.Value" value="2000"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="Semi-White-Hole">
+    <selection>
+      <string_value name="hole_selection_index" value="maximum"/>
+      <string_value name="colour" value="255,255,255"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="CUTTER D 25"/>
+      <string_value name="Drill.Thickness" value=".15"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="2"/>
+      <string_value name="FeedRate.Cutting.Value" value="2000"/>
+      <string_value name="SpindleSpeed.Value" value="2500"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="Finish-White">
+    <selection>
+      <string_value name="colour" value="255,255,255"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="0"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="SpindleSpeed.Value" value="1000"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+  </method>
+  <method name="Finish-Green-Pink-Holes">
+    <selection>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="0"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="FeedRate.Cutting.Value" value="2000"/>
+      <string_value name="SpindleSpeed.Value" value="2000"/>
+    </drill_operation>
+  </method>
+  <method name="Brown">
+    <selection>
+      <string_value name="colour" value="153,102,51"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="helical"/>
+      <string_value name="label" value="Helical"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="3"/>
+      <string_value name="FeedRate.Cutting.Value" value="2000"/>
+      <string_value name="SpindleSpeed.Value" value="2000"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+    </drill_operation>
+  </method>
+  <method name="Adjust-Green-Holes">
+    <selection>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-0.025/2"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="10"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="SpindleSpeed.Value" value="1200"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="toolpath_name" value="Adjust-Green-Holes-0025"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_1"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-.025"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+      <string_value name="toolpath_name" value="Adjust-Green-Holes-005"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_2"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value=".5"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+      <string_value name="toolpath_name" value="Adjust-Green-Holes-0075"/>
+      <string_value name="Drill.Thickness" value="-0.075/2"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_3"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-0.04"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+      <string_value name="toolpath_name" value="Adjust-Green-Holes-008"/>
+    </drill_operation>
+  </method>
+  <method name="Adjust-Pink-holes">
+    <selection>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_1"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-.0125"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="FeedRate.Cutting.Value" value="1000"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="toolpath_name" value="Adjust-Pink-holes-0025"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile"/>
+      <string_value name="toolpath_name" value="Adjust-Pink-holes-005"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-0.025"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1200"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_2"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-0.0375"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1200"/>
+      <string_value name="SpindleSpeed.Value" value="1200"/>
+      <string_value name="toolpath_name" value="Adjust_Pink_holes-0075"/>
+    </drill_operation>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile_3"/>
+      <string_value name="Tool" value="ENDMILL D12"/>
+      <string_value name="Drill.Thickness" value="-0.04"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="toolpath_name" value="Adjust-Pink-holes-008"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="hole"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Connections.PlungeDistance" value="5"/>
+      <string_value name="Drill.IncrementalStart" value="0"/>
+      <string_value name="Drill.PeckDepth.Value" value="5"/>
+      <string_value name="FeedRate.Cutting.Value" value="1200"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+    </drill_operation>
+  </method>
+  <method name="Profile_Chamfer">
+    <selection>
+      <string_value name="colour" value="153,102,51"/>
+      <string_value name="hole_selection_index" value="last"/>
+      <string_value name="colour" value="0,255,0"/>
+      <string_value name="colour" value="102,51,204"/>
+    </selection>
+    <drill_operation>
+      <string_value name="Drill.Type" value="profile"/>
+      <string_value name="label" value="Profile"/>
+      <string_value name="Tool" value="CHAMFER_45_D10"/>
+      <string_value name="Drill.TopType" value="hole"/>
+      <string_value name="Drill.DepthType" value="chamfer"/>
+      <string_value name="Drill.UseCycles" value="0"/>
+      <string_value name="Connections.Link[0].Type" value="safe"/>
+      <string_value name="Connections.Link[1].Type" value="safe"/>
+      <string_value name="Chamfer.Width" value="1"/>
+      <string_value name="Sorting" value="shortest"/>
+      <string_value name="Drill.Depth.Value" value="1"/>
+      <string_value name="FeedRate.Cutting.Value" value="800"/>
+      <string_value name="SpindleSpeed.Value" value="1500"/>
+      <string_value name="Drill.PeckDepth.Value" value="1"/>
+      <string_value name="Drill.Split" value="0"/>
+      <string_value name="toolpath_name" value="Chamfer_Profile"/>
+    </drill_operation>
+  </method>
+
+</methods>

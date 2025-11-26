@@ -1,0 +1,63 @@
+FUNCTION Main () {
+// This macro assigns a different color to each hole diameter in active Hole Feature Set
+// Colour order get from macro_path(0)+'\RandomColors.dat'
+// The DropColours members are removed
+   STRING LIST DropColours={'Black','CadetBlue','Yellow'}
+   IF NOT entity_exists('featureset','') {
+      RETURN
+   }
+   EDIT FEATURESET ; DESELECT ALL
+   REAL LIST Diameters=extract(components(entity('featureset','')),'Diameter')
+   INT I = remove_duplicates($Diameters)
+   INT cnt=size($Diameters)
+   STRING ColourList={}
+   CALL FillColourList($ColourList,$DropColours,$cnt)
+   $I=0
+   GRAPHICS LOCK
+   WHILE $I < $cnt {
+      REAL Diameter=$Diameters[$I]
+      EDIT FEATURESET ; SELECT HOLES $Diameter
+      STRING Cmd='EDIT FEATURESET ; COLOUR '+$ColourList[$I]
+      DoCommand $Cmd
+      EDIT FEATURESET ; DESELECT ALL
+      $I=$I+1
+   }
+   GRAPHICS UNLOCK
+}
+
+FUNCTION FillColourList(OUTPUT STRING LIST $ColourList,STRING LIST DropColours,INT $cnt) {
+   $ColourList={}
+   STRING RandomColourFile=macro_path(0)+'\RandomColors.dat'
+   IF NOT file_exists($RandomColourFile) {
+      MESSAGE INFO $RandomColourFile+' not found'
+      RETURN
+   }
+   STRING LIST sData={}
+   DIALOGS MESSAGE OFF
+   FILE CLOSE data
+   DIALOGS MESSAGE ON
+   FILE OPEN $RandomColourFile FOR READ AS data
+   FILE READ $sData FROM data
+   FILE CLOSE data
+   INT I=0
+   FOREACH item IN $sData {
+      $item=trim($item)
+      IF substring($item,0,2) != '//' {
+         STRING LIST T=tokens($item,'|')
+         IF size($T) == 2 AND NOT member($DropColours,$T[0]) {
+            INT J=add_last($ColourList,$T[1])
+            $I=$I+1
+            IF $I == $cnt {
+               BREAK
+            }
+         }
+      }
+      
+   }
+   INT K=0
+   WHILE $I < $cnt {
+      INT J=add_last($ColourList,$ColourList[$K])
+      $I=$I+1
+      $K=$K+1
+   }
+}

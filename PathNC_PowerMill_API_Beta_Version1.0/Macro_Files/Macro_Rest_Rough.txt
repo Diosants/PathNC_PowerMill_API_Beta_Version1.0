@@ -1,0 +1,53 @@
+FORM RIBBON BACKSTAGE CLOSE RESET ALL
+
+STRING $tName = "10 FLAT"
+IF NOT entity_exists ('Tool', $tName) {
+	CREATE TOOL $tName ENDMILL
+	EDIT TOOL $tName DIAMETER "10"
+	EDIT TOOL $tName LENGTH "50"
+}
+STRING $tpName = FOLDER("Toolpath")[SIZE(FOLDER("Toolpath"))-1].Name
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "3D-Area-Clearance/Model-Rest-Area-Clearance.002.ptf"
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $tName
+EDIT TPPAGE SWAreaClearance
+EDIT PAR 'Strategy' 'offset_area_clear' EDIT PAR 'AreaClearance.Offset.Type' 'all'
+EDIT PAR 'AreaClearance.Profile.CutDirection' 'any'
+EDIT PAR 'CutDirection' 'any'
+EDIT PAR 'Thickness' ".1"
+EDIT PAR 'UseAxialThickness' '1'
+EDIT PAR 'AxialThickness' "0.05"
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "7"
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN ".15"
+EDIT TPPAGE SWRest
+EDIT PAR 'AreaClearance.Rest.ReferenceType' 'toolpath'
+EDIT PAR 'AreaClearance.Rest.Toolpath' '$tpName'
+//EDIT PAR 'AreaClearance.Rest.Toolpath' "O5001_16 R0,8 RGH"
+EDIT PAR 'AreaClearance.Rest.ThresholdThickness' ".1"
+EDIT PAR 'AreaClearance.Rest.ExpandArea' "1"
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWAreaFlatAClear
+EDIT PAR 'AreaClearance.ZHeights.Flats' 'level'
+EDIT TPPAGE SWPointDistrb
+EDIT TPPAGE SWLeadsLinks
+EDIT TPPAGE SWLeadIn
+FORM PMLLEADINRAMP EDIT TOOLPATH LEADS RAMPPAGE LEADINRAMPOPT1
+EDIT TOOLPATH LEADS LEADIN RAMPOPT ZIGANGLE "2"
+EDIT TOOLPATH LEADS LEADIN RAMPOPT HEIGHT_INCREMENT ".5"
+LEADINRAMP ACCEPT
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'straight'
+EDIT PAR 'Connections.Link[1].Type' 'skim'
+EDIT PAR 'Connections.DefaultLink[0].Type' 'skim'
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "2000.0"
+EDIT FRATE "1500.0"
+EDIT PRATE "1000"
+EDIT RSPEED "8000.0"
+EDIT COOLANT NONE
+EDIT TPPAGE SWSEPtSPoint
+RENAME TOOLPATH "#" "10 FLAT REST"
+EDIT TOOLPATH "10 FLAT REST" CALCULATE
+FORM ACCEPT SFAreaClearance
+
+MACRO "C:\Program Files\Autodesk\PowerMill 2023\lib\macro\pmlocal.mac"

@@ -1,0 +1,84 @@
+// Prompt user for thickness input
+REAL $thic = 0
+BOOL $err = 0
+
+DO {
+    $thic = INPUT "Enter Maximum Thickness"
+    $err = ERROR $thic
+    IF $err {
+        MESSAGE ERROR "Thickness value must be numerical. Please try again."
+    } ELSEIF ($thic <= 0.5) {
+        MESSAGE ERROR "Value must be greater than 0.5. Please try again."
+        $err = 1
+    }
+} WHILE ($err OR $thic <= 0.5)
+
+// Initialize count based on thickness
+INT $count = INT($thic / 2)
+
+// Loop to perform operations based on count
+WHILE $count > 0 {
+    // Example operation: reduce thickness
+    $thic = $thic - 2
+    $count = $count - 1
+}
+
+
+//
+
+EXPLORER SELECT Toolpath ; NEW
+FORM COLLISION
+EDIT COLLISION TYPE GOUGE
+EDIT COLLISION STOCKMODEL_CHECK N
+EDIT COLLISION SCOPE ALL
+EDIT COLLISION SPLIT_TOOLPATH N
+EDIT PAR 'Verification.UseVerificationThickness' 1
+EDIT PAR 'Verification.Thickness' "0.5"
+EDIT COLLISION APPLY
+COLLISION ACCEPT
+//
+
+$Count = Count – 1
+$thic - $thic – 2
+ }
+ // 
+
+//
+// *** Temporarily switch off messages ***
+DIALOGS MESSAGE OFF
+//
+EXPLORER SELECT Toolpath ; NEW
+FORM COLLISION
+EDIT COLLISION TYPE GOUGE
+EDIT COLLISION STOCKMODEL_CHECK N
+EDIT COLLISION SCOPE ALL
+EDIT COLLISION SPLIT_TOOLPATH N
+EDIT PAR 'Verification.UseVerificationThickness' 1
+EDIT PAR 'Verification.Thickness' "0.5"
+EDIT COLLISION APPLY
+COLLISION ACCEPT
+//
+// *** Switch on messages ***
+DIALOGS MESSAGE ON
+// 
+//
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI
+"Finishing\Steep-and-Shallow-Finishing.002.ptf"
+EDIT PAR 'InterConstzOrder' 'combined'
+EDIT PAR 'ThresholdAngle' "5"
+EDIT PAR 'Overlap' "0"
+EDIT PAR 'CutDirection' 'climb'
+EDIT PAR 'ShallowCutDirection' 'climb'
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' Edit Par 'Stepover' "3"
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'ShallowStepover.Value' "3" 
+EDIT PAR 'ShallowStrategy' 'raster'
+EDIT TPPAGE RASTERPAGE
+EDIT TPPAGE STEEPSHALLOW
+EDIT PAR 'Tolerance' "0.1"
+EDIT PAR 'Thickness' $thic
+// EDIT TOOLPATH ; REAPPLYFROMGUI
+EDIT TOOLPATH ; CALCULATE
+SteepShallowFin ACCEPT
+DRAW TOOLPATH ;
+//
+// 

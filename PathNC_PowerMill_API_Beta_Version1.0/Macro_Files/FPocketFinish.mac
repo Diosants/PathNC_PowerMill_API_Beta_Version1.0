@@ -1,0 +1,49 @@
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR STRATEGY "Feature-Machining/Feature-Finishing.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Feature-Machining/Feature-Finishing.ptf"
+
+
+RENAME TOOLPATH "#" "Pocket_Finishing"
+EDIT TPPAGE SWFeatures
+EDIT TPFEATURES NONE
+EDIT TPFEATURES ALL_MACHINABLE
+EDIT TPPAGE SWWorkplane
+EDIT TPPAGE SWBlock
+EDIT TPPAGE TOOL
+FORM TOOLDBSEARCH
+TOOLDBSEARCH ACCEPT
+ACTIVATE TOOL "ENDMILL D12"
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE SWLimit
+EDIT TPPAGE SWFeatureFin
+EDIT TPPAGE SWOffsetAreaClear
+EDIT TPPAGE SWCutDistWall
+EDIT PAR 'CutDistances.Radial.StockDepth' ".5"
+EDIT PAR 'AxialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepdown' ".5"
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' ".4"
+EDIT TPPAGE SWCutDistFlat
+EDIT PAR 'ShallowStepover.Active' '1' EDIT PAR 'ShallowStepover.Value' "3"
+EDIT PAR 'CutDistances.Axial.StockDepth' "0"
+EDIT TPPAGE SWStepReduction
+EDIT TPPAGE SWAreaFilterAClear
+EDIT PAR 'AreaClearance.Slicer.Filter.Active' '0'
+EDIT PAR 'AreaClearance.Slicer.Filter.Active' '1'
+EDIT PAR 'AreaClearance.Slicer.Filter.Threshold' "2.0"
+EDIT TPPAGE SWHighSpeedAClr
+EDIT TPPAGE SWApproachOutside
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TPPAGE SWCutterComp
+EDIT  PAR 'CNCCutterCompensation.Active' '1'
+EDIT PAR 'CNCCutterCompensation.Active' '0'
+EDIT TPPAGE SWLeadIn
+EDIT TOOLPATH LEADS LEADOUT COPY
+EDIT TPPAGE SWLeadFeedRate
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "2000"
+EDIT FRATE "1500"
+EDIT PRATE "1500"
+EDIT RSPEED "8000"
+EDIT TOOLPATH "Pocket_Finishing" CALCULATE
+FORM ACCEPT SFFeatureFin
+

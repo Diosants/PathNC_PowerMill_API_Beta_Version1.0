@@ -1,0 +1,939 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>PathNC_PowerMill_API_Beta_Version1._0</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Macro_Files\.editorconfig" />
+    <None Remove="Macro_Files\2D_Curve_Area_Clearance.mac" />
+    <None Remove="Macro_Files\2d_Curve_Area_Clearance_Rectangle.mac" />
+    <None Remove="Macro_Files\2d_Curve_Contourn_Cylinder.mac" />
+    <None Remove="Macro_Files\2d_Curve_Rectangle_Profile.mac" />
+    <None Remove="Macro_Files\2D_Feature_Interactive_Circle_Boss_Done.mac" />
+    <None Remove="Macro_Files\2D_Feature_Interactive_Pocket_Done.mac" />
+    <None Remove="Macro_Files\2D_Feature_Interactive_Pocket_Refactored-Remain_To_Be_Done.mac" />
+    <None Remove="Macro_Files\2D_Feature_Interactive_Rectangle_Boss_Done.mac" />
+    <None Remove="Macro_Files\3D-offsetsemi-finish-tor16r1.mac" />
+    <None Remove="Macro_Files\ACTIVATE_WORKPLANE_NC_PROGRAM.mac" />
+    <None Remove="Macro_Files\ADD_RIBBON_TAB.mac" />
+    <None Remove="Macro_Files\Add_View_Workplane.mac" />
+    <None Remove="Macro_Files\Area Clearance StockModel.mac" />
+    <None Remove="Macro_Files\Autoset Work Plane.mac" />
+    <None Remove="Macro_Files\Back View.mac" />
+    <None Remove="Macro_Files\batch.mac" />
+    <None Remove="Macro_Files\block.mac" />
+    <None Remove="Macro_Files\Block_From_Active_Pattern.mac" />
+    <None Remove="Macro_Files\block_limits.mac" />
+    <None Remove="Macro_Files\Boundary_Collect.mac" />
+    <None Remove="Macro_Files\Boundary_From_Block.mac" />
+    <None Remove="Macro_Files\Boundary_Offset.mac" />
+    <None Remove="Macro_Files\Boundary_Shallow.mac" />
+    <None Remove="Macro_Files\Boundary_Silhouete.mac" />
+    <None Remove="Macro_Files\CalculateStockModel.mac" />
+    <None Remove="Macro_Files\checkcolision.mac" />
+    <None Remove="Macro_Files\ClearBoundary.mac" />
+    <None Remove="Macro_Files\Collision_&amp;_Gouge_check.mac" />
+    <None Remove="Macro_Files\ColorirFuros.mac" />
+    <None Remove="Macro_Files\ColorModelByLevel.mac" />
+    <None Remove="Macro_Files\ContourBlockFinal.mac" />
+    <None Remove="Macro_Files\ContournBlock.mac" />
+    <None Remove="Macro_Files\CreateBoundaries.mac" />
+    <None Remove="Macro_Files\CreateFeature.mac" />
+    <None Remove="Macro_Files\CreateFeaturePocket.mac" />
+    <None Remove="Macro_Files\CREATE_STOCK_MODEL.mac" />
+    <None Remove="Macro_Files\Criar-Pasta.mac" />
+    <None Remove="Macro_Files\criarFigura.mac" />
+    <None Remove="Macro_Files\Curve_Profile_Pattern Selected.mac" />
+    <None Remove="Macro_Files\Delete_Stock_Model.mac" />
+    <None Remove="Macro_Files\DESBASTE-MOLDE.mac" />
+    <None Remove="Macro_Files\DETECT_BAD_SURFACES.mac" />
+    <None Remove="Macro_Files\Drill.mac" />
+    <None Remove="Macro_Files\DRILLING_MACRO.mac" />
+    <None Remove="Macro_Files\EditToolpath.mac" />
+    <None Remove="Macro_Files\EditToolpaths.mac" />
+    <None Remove="Macro_Files\Facing.mac" />
+    <None Remove="Macro_Files\FACING_FLATS.mac" />
+    <None Remove="Macro_Files\Feature Group.mac" />
+    <None Remove="Macro_Files\FeatureGroup.mac" />
+    <None Remove="Macro_Files\FeaturePocket.mac" />
+    <None Remove="Macro_Files\Feature_Area_Clearance.mac" />
+    <None Remove="Macro_Files\Feature_Circle_Interactive_Done.mac" />
+    <None Remove="Macro_Files\Feature_Finishing.mac" />
+    <None Remove="Macro_Files\Feature_Group_Rectangle_Interactive.mac" />
+    <None Remove="Macro_Files\Feature_Pocket.mac" />
+    <None Remove="Macro_Files\Feature_Pocktet_Profile.mac" />
+    <None Remove="Macro_Files\Feature_Poctet_Area_Clearance.mac" />
+    <None Remove="Macro_Files\Feature_Profile.mac" />
+    <None Remove="Macro_Files\Flip180X.mac" />
+    <None Remove="Macro_Files\Foreach_WP_Create_Holes.mac" />
+    <None Remove="Macro_Files\FPocketFinish.mac" />
+    <None Remove="Macro_Files\FrontView.mac" />
+    <None Remove="Macro_Files\Function  Example.mac" />
+    <None Remove="Macro_Files\furacoes-setup-01.mac" />
+    <None Remove="Macro_Files\GaugeCheck.mac" />
+    <None Remove="Macro_Files\GerarSetupSheet.mac.txt" />
+    <None Remove="Macro_Files\GetWorkPlane.mac" />
+    <None Remove="Macro_Files\Get_Rectangle_Pocket.mac" />
+    <None Remove="Macro_Files\Gouge_Check.mac" />
+    <None Remove="Macro_Files\Holder_Ballnosed.mac" />
+    <None Remove="Macro_Files\Holder_chamferer.mac" />
+    <None Remove="Macro_Files\Holder_drill.mac" />
+    <None Remove="Macro_Files\Holder_endmill.mac" />
+    <None Remove="Macro_Files\Holder_FaceMill.mac" />
+    <None Remove="Macro_Files\Holder_Indexable.mac" />
+    <None Remove="Macro_Files\Holder_TapMetric.mac" />
+    <None Remove="Macro_Files\Holder_TipRadiused.mac" />
+    <None Remove="Macro_Files\HoleColorByDiameterV2.mac" />
+    <None Remove="Macro_Files\holes-collor.mac" />
+    <None Remove="Macro_Files\HolesByColor.mac.txt" />
+    <None Remove="Macro_Files\HolesColored.mac" />
+    <None Remove="Macro_Files\Holes_By_Color.mac" />
+    <None Remove="Macro_Files\HOLES_BY_DIAMETER.mac" />
+    <None Remove="Macro_Files\IMPORT-TEMPLATE.mac" />
+    <None Remove="Macro_Files\Import_stock_model.mac" />
+    <None Remove="Macro_Files\IMPORT_STOCK_MODEL1.mac" />
+    <None Remove="Macro_Files\Input_Square_Dimensions.mac" />
+    <None Remove="Macro_Files\Left View.mac" />
+    <None Remove="Macro_Files\Macro to create hole feature sets.mac" />
+    <None Remove="Macro_Files\Macro-Semi-Finish-Mold.mac" />
+    <None Remove="Macro_Files\Macro-Semi-Finish-Mold.txt" />
+    <None Remove="Macro_Files\Macro_Rest_Rough.txt" />
+    <None Remove="Macro_Files\MACRO_ROUGH_O3_TOOLS.mac" />
+    <None Remove="Macro_Files\MOLD-ROUGH-SEMI-FINISH.mac" />
+    <None Remove="Macro_Files\MOLD-ROUGH-SEMI-FINISH.txt" />
+    <None Remove="Macro_Files\MULTIPLE_WORKPLANES.mac" />
+    <None Remove="Macro_Files\Pattern_Curves.mac" />
+    <None Remove="Macro_Files\Pattern_From_Block.mac" />
+    <None Remove="Macro_Files\Pattern_radius.mac" />
+    <None Remove="Macro_Files\PLACAP1FULL.mac" />
+    <None Remove="Macro_Files\pocketfinal.mac" />
+    <None Remove="Macro_Files\pocket_Rough.mac" />
+    <None Remove="Macro_Files\PowerMill Macro Capture Model View.mac" />
+    <None Remove="Macro_Files\POWERMILL_THEME.mac" />
+    <None Remove="Macro_Files\Print out the diameter of each hol.mac" />
+    <None Remove="Macro_Files\RandomColors.dat" />
+    <None Remove="Macro_Files\renameToolPath.mac" />
+    <None Remove="Macro_Files\RENAME_TOOLPATH.mac" />
+    <None Remove="Macro_Files\RENUMBER_TOOLS.mac" />
+    <None Remove="Macro_Files\rest_rough_diam20.mac" />
+    <None Remove="Macro_Files\rest_rough_endmill-diam-10.mac" />
+    <None Remove="Macro_Files\rest_rough_endmill-diam-5.mac" />
+    <None Remove="Macro_Files\Right View.mac" />
+    <None Remove="Macro_Files\rough.mac" />
+    <None Remove="Macro_Files\Roughn.mac" />
+    <None Remove="Macro_Files\RRR.tap" />
+    <None Remove="Macro_Files\SALVAR FERRAMENTA.mac" />
+    <None Remove="Macro_Files\SaveProject.mac" />
+    <None Remove="Macro_Files\Selecao.mac" />
+    <None Remove="Macro_Files\Select Toolpaths.mac" />
+    <None Remove="Macro_Files\SELECTCOLOR.mac" />
+    <None Remove="Macro_Files\select_file.mac" />
+    <None Remove="Macro_Files\Semi-Finish-Corner-D8.mac" />
+    <None Remove="Macro_Files\semi-finish-tor16r1.mac" />
+    <None Remove="Macro_Files\SEPARATE_LEVELS_SURFACES_HOLES.mac" />
+    <None Remove="Macro_Files\SEQUENTIAL_TOOL_NUMBER.mac" />
+    <None Remove="Macro_Files\SetSafeDistance.mac" />
+    <None Remove="Macro_Files\Setup.MAC.txt" />
+    <None Remove="Macro_Files\Setup1-Cavity.mac" />
+    <None Remove="Macro_Files\Setup1Mold.mac" />
+    <None Remove="Macro_Files\SetupSheet.mac" />
+    <None Remove="Macro_Files\Simular.mac" />
+    <None Remove="Macro_Files\simulation.mac" />
+    <None Remove="Macro_Files\Square_Block.mac" />
+    <None Remove="Macro_Files\stock.mac" />
+    <None Remove="Macro_Files\StockModel.mac" />
+    <None Remove="Macro_Files\StockModelInsertToolPath.mac" />
+    <None Remove="Macro_Files\Stock_Model_Lock.txt" />
+    <None Remove="Macro_Files\Templatetools.mac" />
+    <None Remove="Macro_Files\Teste_Feature_toolpath.mac" />
+    <None Remove="Macro_Files\ToolList.mac" />
+    <None Remove="Macro_Files\Toolpath_folder.mac" />
+    <None Remove="Macro_Files\Twist180.mac" />
+    <None Remove="Macro_Files\VerifyCollision.mac" />
+    <None Remove="Macro_Files\WCS_StockModel.mac" />
+    <None Remove="Macro_Files\Workplane-TopCentre.mac" />
+    <None Remove="Macro_Files\WORKPLANE.mac" />
+    <None Remove="Macro_Files\ZConstantLevel.mac" />
+    <None Remove="Macro_Files\ZConstantLevel_Semi.mac" />
+    <None Remove="Template_Files\3D-Offset-Wall-Floor.ptf" />
+    <None Remove="Template_Files\3D_offset_Profile.ptf" />
+    <None Remove="Template_Files\Adjust-Feature-Pocket-0025.ptf" />
+    <None Remove="Template_Files\Adjust-Feature-Pocket-005.ptf" />
+    <None Remove="Template_Files\Adjust-Feature-Pocket-0075.ptf" />
+    <None Remove="Template_Files\Adjust-Feature-Pocket-010.ptf" />
+    <None Remove="Template_Files\Adjust-Grey-Profile-0025.ptf" />
+    <None Remove="Template_Files\Adjust-Grey-Profile-005.ptf" />
+    <None Remove="Template_Files\Adjust-Grey-Profile-0075.ptf" />
+    <None Remove="Template_Files\Adjust-Grey-Profile-010.ptf" />
+    <None Remove="Template_Files\Break-Chip.ptf" />
+    <None Remove="Template_Files\Bushes_Full_Automation.ptf" />
+    <None Remove="Template_Files\Cbore_Mold_42-28-MM.ptf" />
+    <None Remove="Template_Files\Cbore_Mold_Plate_Full_Automation.ptf" />
+    <None Remove="Template_Files\Center-Drill.ptf" />
+    <None Remove="Template_Files\Constant_Z_Finishing.ptf" />
+    <None Remove="Template_Files\Corner-Finish-Wall-Floor.ptf" />
+    <None Remove="Template_Files\Corner-Multi-pencil-Finishing.ptf" />
+    <None Remove="Template_Files\Corner_Clearance.ptf" />
+    <None Remove="Template_Files\Corner_Finishing.ptf" />
+    <None Remove="Template_Files\Corner_Pencil_Finishing.ptf" />
+    <None Remove="Template_Files\Counterbore-Diam-26-31-MM.ptf" />
+    <None Remove="Template_Files\Counterbore-Diam-30-35-MM.ptf" />
+    <None Remove="Template_Files\Counterbore_42-48.ptf" />
+    <None Remove="Template_Files\Deep-Drill.ptf" />
+    <None Remove="Template_Files\Feature-Area-Clearance.ptf" />
+    <None Remove="Template_Files\Feature-Finish-Profile.ptf" />
+    <None Remove="Template_Files\Feature-Finish-Wall-Floor.ptf" />
+    <None Remove="Template_Files\Feature-Pocket-Area-Clearance.ptf" />
+    <None Remove="Template_Files\Feature-Pocket-Profile.ptf" />
+    <None Remove="Template_Files\Feature-Pocket-Rest-Area-Clearance.ptf" />
+    <None Remove="Template_Files\Fine-Boring.ptf" />
+    <None Remove="Template_Files\Finish-Core-Blue.ptf" />
+    <None Remove="Template_Files\FINISH-CORNER-BALL-DIAM-4.ptf" />
+    <None Remove="Template_Files\FINISH-CORNER-BALL-DIAM-6.ptf" />
+    <None Remove="Template_Files\Finish-Feature-Pocket.ptf" />
+    <None Remove="Template_Files\FINISH-FLATS-AREA-TOR-10.ptf" />
+    <None Remove="Template_Files\Finish-Grey-Profile+00.ptf" />
+    <None Remove="Template_Files\Finish-Orange-Faces.ptf" />
+    <None Remove="Template_Files\FINISH-PENCIL- BALL-DIAM-4MM.ptf" />
+    <None Remove="Template_Files\Finish-Pocket-Flats.ptf" />
+    <None Remove="Template_Files\FINISH-PROFILE-SPH-DIAM-10.ptf" />
+    <None Remove="Template_Files\Finish-Red-Lockers.ptf" />
+    <None Remove="Template_Files\Helical.ptf" />
+    <None Remove="Template_Files\Inclined-Flat-Finishing.ptf" />
+    <None Remove="Template_Files\MethodDrillExemplo2.ptf" />
+    <None Remove="Template_Files\Model_Area_Clearance.ptf" />
+    <None Remove="Template_Files\Model_Rest_Area_Clearance.ptf" />
+    <None Remove="Template_Files\Model_Rest_Profile.ptf" />
+    <None Remove="Template_Files\Mold-Rough-Diam-42.ptf" />
+    <None Remove="Template_Files\Offset_Flat_Finishing.ptf" />
+    <None Remove="Template_Files\Optimized_Constant_Z_Finished.ptf" />
+    <None Remove="Template_Files\Profile-Drilling.ptf" />
+    <None Remove="Template_Files\Raster-Finishing.ptf" />
+    <None Remove="Template_Files\Ream.ptf" />
+    <None Remove="Template_Files\REST-RGH-PROFILE-TOOL-DIAM-25.ptf" />
+    <None Remove="Template_Files\REST-RGH-PROFILE-TOOL-SPH-DIAM-10.ptf" />
+    <None Remove="Template_Files\REST-RGH-TOOL-DIAM-12.ptf" />
+    <None Remove="Template_Files\REST-RGH-Tool-Diam-25.ptf" />
+    <None Remove="Template_Files\Rgh-Core.ptf" />
+    <None Remove="Template_Files\RGH-Tool-Diam-42.ptf" />
+    <None Remove="Template_Files\RigidTap.ptf" />
+    <None Remove="Template_Files\Rough-Grey-Profile+050.ptf" />
+    <None Remove="Template_Files\Rough-Pockets-Area-Clearance.ptf" />
+    <None Remove="Template_Files\Semi-Feature-Pocket.ptf" />
+    <None Remove="Template_Files\SEMI-FINISH-FLATS-AREA-TOR-DIAM-10.ptf" />
+    <None Remove="Template_Files\Semi-Finish-Grey-Profile+015.ptf" />
+    <None Remove="Template_Files\SEMI-FINISH-PROFILE-TOR-DIAM-10.ptf" />
+    <None Remove="Template_Files\Semi-Finish-Red-Lockers.ptf" />
+    <None Remove="Template_Files\Semi-Finish_Orange_Faces.ptf" />
+    <None Remove="Template_Files\Semi_Finish_Core_Blue.ptf" />
+    <None Remove="Template_Files\Spiral-Finishing.ptf" />
+    <None Remove="Template_Files\Step_Shallow_Finishing.ptf" />
+    <None Remove="Template_Files\Surface-Finishing.ptf" />
+    <None Remove="Template_Files\Tap.ptf" />
+    <None Remove="Template_Files\Templatetools.ptf" />
+    <None Remove="Template_Files\Thread-Mill.ptf" />
+    <None Remove="Template_Files\Tool_Library_Updated.ptf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autodesk.ProductInterface.PowerMILL" Version="1.2.5" />
+    <PackageReference Include="Autodesk.WPFControls.ProductControls.PowerMILL" Version="1.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Macro_Files\.editorconfig">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2D_Curve_Area_Clearance.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2d_Curve_Area_Clearance_Rectangle.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2d_Curve_Contourn_Cylinder.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2d_Curve_Rectangle_Profile.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2D_Feature_Interactive_Circle_Boss_Done.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2D_Feature_Interactive_Pocket_Done.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2D_Feature_Interactive_Pocket_Refactored-Remain_To_Be_Done.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\2D_Feature_Interactive_Rectangle_Boss_Done.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\3D-offsetsemi-finish-tor16r1.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ACTIVATE_WORKPLANE_NC_PROGRAM.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ADD_RIBBON_TAB.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Add_View_Workplane.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Area Clearance StockModel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Autoset Work Plane.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Back View.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\batch.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\block.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Block_From_Active_Pattern.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\block_limits.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Boundary_Collect.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Boundary_From_Block.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Boundary_Offset.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Boundary_Shallow.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Boundary_Silhouete.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\CalculateStockModel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\checkcolision.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ClearBoundary.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Collision_&amp;_Gouge_check.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ColorirFuros.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ColorModelByLevel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ContourBlockFinal.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ContournBlock.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\CreateBoundaries.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\CreateFeature.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\CreateFeaturePocket.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\CREATE_STOCK_MODEL.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Criar-Pasta.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\criarFigura.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Curve_Profile_Pattern Selected.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Delete_Stock_Model.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\DESBASTE-MOLDE.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\DETECT_BAD_SURFACES.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Drill.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\DRILLING_MACRO.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\EditToolpath.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\EditToolpaths.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Facing.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\FACING_FLATS.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature Group.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\FeatureGroup.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\FeaturePocket.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Area_Clearance.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Circle_Interactive_Done.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Finishing.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Group_Rectangle_Interactive.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Pocket.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Pocktet_Profile.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Poctet_Area_Clearance.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Feature_Profile.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Flip180X.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Foreach_WP_Create_Holes.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\FPocketFinish.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\FrontView.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Function  Example.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\furacoes-setup-01.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\GaugeCheck.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\GerarSetupSheet.mac.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\GetWorkPlane.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Get_Rectangle_Pocket.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Gouge_Check.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_Ballnosed.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_chamferer.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_drill.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_endmill.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_FaceMill.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_Indexable.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_TapMetric.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holder_TipRadiused.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\HoleColorByDiameterV2.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\holes-collor.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\HolesByColor.mac.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\HolesColored.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Holes_By_Color.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\HOLES_BY_DIAMETER.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\IMPORT-TEMPLATE.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Import_stock_model.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\IMPORT_STOCK_MODEL1.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Input_Square_Dimensions.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Left View.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Macro to create hole feature sets.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Macro-Semi-Finish-Mold.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Macro-Semi-Finish-Mold.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Macro_Rest_Rough.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\MACRO_ROUGH_O3_TOOLS.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\MOLD-ROUGH-SEMI-FINISH.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\MOLD-ROUGH-SEMI-FINISH.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\MULTIPLE_WORKPLANES.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Pattern_Curves.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Pattern_From_Block.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Pattern_radius.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\PLACAP1FULL.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\pocketfinal.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\pocket_Rough.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\PowerMill Macro Capture Model View.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\POWERMILL_THEME.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Print out the diameter of each hol.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\RandomColors.dat">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\renameToolPath.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\RENAME_TOOLPATH.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\RENUMBER_TOOLS.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\rest_rough_diam20.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\rest_rough_endmill-diam-10.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\rest_rough_endmill-diam-5.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Right View.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\rough.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Roughn.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\RRR.tap">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SALVAR FERRAMENTA.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SaveProject.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Selecao.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Select Toolpaths.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SELECTCOLOR.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\select_file.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Semi-Finish-Corner-D8.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\semi-finish-tor16r1.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SEPARATE_LEVELS_SURFACES_HOLES.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SEQUENTIAL_TOOL_NUMBER.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SetSafeDistance.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Setup.MAC.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Setup1-Cavity.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Setup1Mold.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\SetupSheet.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Simular.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\simulation.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Square_Block.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\stock.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\StockModel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\StockModelInsertToolPath.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Stock_Model_Lock.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Templatetools.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Teste_Feature_toolpath.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ToolList.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Toolpath_folder.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Twist180.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\VerifyCollision.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\WCS_StockModel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\Workplane-TopCentre.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\WORKPLANE.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ZConstantLevel.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Macro_Files\ZConstantLevel_Semi.mac">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\3D-Offset-Wall-Floor.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\3D_offset_Profile.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Feature-Pocket-0025.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Feature-Pocket-005.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Feature-Pocket-0075.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Feature-Pocket-010.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Grey-Profile-0025.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Grey-Profile-005.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Grey-Profile-0075.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Adjust-Grey-Profile-010.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Break-Chip.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Bushes_Full_Automation.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Cbore_Mold_42-28-MM.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Cbore_Mold_Plate_Full_Automation.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Center-Drill.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Constant_Z_Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Corner-Finish-Wall-Floor.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Corner-Multi-pencil-Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Corner_Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Corner_Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Corner_Pencil_Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Counterbore-Diam-26-31-MM.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Counterbore-Diam-30-35-MM.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Counterbore_42-48.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Deep-Drill.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Area-Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Finish-Profile.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Finish-Wall-Floor.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Pocket-Area-Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Pocket-Profile.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Feature-Pocket-Rest-Area-Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Fine-Boring.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Core-Blue.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\FINISH-CORNER-BALL-DIAM-4.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\FINISH-CORNER-BALL-DIAM-6.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Feature-Pocket.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\FINISH-FLATS-AREA-TOR-10.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Grey-Profile+00.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Orange-Faces.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\FINISH-PENCIL- BALL-DIAM-4MM.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Pocket-Flats.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\FINISH-PROFILE-SPH-DIAM-10.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Finish-Red-Lockers.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Helical.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Inclined-Flat-Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\MethodDrillExemplo2.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Model_Area_Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Model_Rest_Area_Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Model_Rest_Profile.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Mold-Rough-Diam-42.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Offset_Flat_Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Optimized_Constant_Z_Finished.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Profile-Drilling.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Raster-Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Ream.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\REST-RGH-PROFILE-TOOL-DIAM-25.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\REST-RGH-PROFILE-TOOL-SPH-DIAM-10.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\REST-RGH-TOOL-DIAM-12.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\REST-RGH-Tool-Diam-25.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Rgh-Core.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\RGH-Tool-Diam-42.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\RigidTap.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Rough-Grey-Profile+050.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Rough-Pockets-Area-Clearance.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Semi-Feature-Pocket.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\SEMI-FINISH-FLATS-AREA-TOR-DIAM-10.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Semi-Finish-Grey-Profile+015.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\SEMI-FINISH-PROFILE-TOR-DIAM-10.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Semi-Finish-Red-Lockers.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Semi-Finish_Orange_Faces.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Semi_Finish_Core_Blue.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Spiral-Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Step_Shallow_Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Surface-Finishing.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Tap.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Templatetools.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Thread-Mill.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Template_Files\Tool_Library_Updated.ptf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

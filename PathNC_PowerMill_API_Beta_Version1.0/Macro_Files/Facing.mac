@@ -1,0 +1,86 @@
+
+RESET LOCALVARS
+
+DIALOGS MESSAGE OFF
+
+DIALOGS ERROR OFF
+
+STRING $VarSelectedWorkPlane = INPUT ENTITY WORKPLANE "Please select Workplane."
+MACRO PAUSE " Please, Select the Tool"
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Please select a tool from the list."
+
+FORM STRATEGYSELECTOR
+STRATEGYSELECTOR CATEGORY
+ 'Curve-Machining' NEW
+STRATEGYSELECTOR STRATEGY "Curve-Machining/Face-Milling.002.ptf" NEW
+
+IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI "Curve-Machining/Face-Milling.002.ptf"
+
+
+REAL $VarxyExpansion = INPUT " Input XY Expansion"
+REAL $VarStepover = INPUT " Tool Side Step"
+REAL $VarStockFace = INPUT " Material to be cut  from the face"
+REAL $VarStepdown = INPUT " Enter Stepdown (z)"
+REAL $VarRasterAngle = INPUT " Raster Angle"
+
+
+
+
+EDIT TPPAGE SWBlock
+EDIT BLOCK RESET
+EDIT BLOCK XLEN LOCK
+EDIT BLOCK YLEN LOCK
+EDIT BLOCK ZMIN LOCK
+EDIT BLOCK ZMAX ".1"
+EDIT BLOCK RESET
+EDIT BLOCK RESETLIMIT $VarStockFace
+EDIT BLOCK RESET
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE TOOL
+ACTIVATE TOOL $VarSelectedTool
+RENAME TOOLPATH "#" "Facing"
+EDIT TPPAGE SWCutDistVert
+EDIT TPPAGE SWFaceMilling
+Edit par 'Face.Z' "0"
+Edit par 'Face.XYExpansion' $VarxyExpansion
+Edit par 'PatternStyle' 'two_way'
+Edit par 'RadialDepthOfCut.UserDefined' '1' Edit par 'Stepover' $VarStepover
+EDIT TPPAGE SWCutDistVert
+Edit par 'CutDistances.Axial.StockDepth' $VarStockFace
+Edit par 'AxialDepthOfCut.UserDefined' $VarStockFace Edit par 'Stepdown' $VarStockFace
+Edit par 'AxialDepthOfCut.UserDefined' '1' Edit par 'Stepdown' "$VarStepdown"
+EDIT TPPAGE SWFinishFlrWall
+EDIT TPPAGE SWFaceRaster
+EDIT PAR 'AutomaticRasterAngle' '0'
+Edit par 'RasterAngle' "$VarRasterAngle"
+EDIT TPPAGE SWAutoVerifMdlG
+EDIT TPPAGE SWToolAxOVec
+EDIT TPPAGE SWToolRapidMvClear
+EDIT TPPAGE SWLeadIn
+EDIT TOOLPATH LEADS LEADIN EXTENDED
+EDIT TOOLPATH LEADS LEADIN DISTANCE "10"
+EDIT TOOLPATH LEADS LEADOUT COPY
+EDIT TPPAGE SWLink
+EDIT PAR 'Connections.Link[0].Type' 'circular_arc'
+EDIT PAR 'Connections.Link.First.Constraint[0].Distance.Value' "100"
+EDIT PAR 'Connections.Link[1].Type' 'safe'
+EDIT TPPAGE SWFeedSpeed
+EDIT RPM "3000"
+EDIT FRATE "2800"
+EDIT PRATE "2800"
+EDIT RSPEED "8000"
+EDIT TOOLPATH "Facing" CALCULATE
+FORM ACCEPT SFFaceMilling
+
+STRING FName = string(Tool.Name) 
+RENAME TOOLPATH ; $FName
+PRINT = Toolpath.Name
+
+
+EDIT BLOCK RESET
+EDIT BLOCK XLEN UNLOCK
+EDIT BLOCK YLEN UNLOCK
+EDIT BLOCK ZLEN UNLOCK
+
+

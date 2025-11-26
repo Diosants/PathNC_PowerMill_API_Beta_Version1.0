@@ -1,0 +1,10 @@
+EDIT BOUNDARY ; CURVEEDITOR START
+CURVEEDITOR MODE OFFSET
+MACRO PAUSE "Select the boundary"
+ REAL VarOffset = INPUT " Select  the boundary and enter the Offset"
+MODE TRANSFORM OFFSET DISTANCE $VarOffset
+CURVEEDITOR FINISH ACCEPT
+STRING BName = "Boundary_type_ " + string(Boundary.Type)
+RENAME BOUNDARY ; $BName
+PRINT = Boundary.Name
+

@@ -1,0 +1,148 @@
+// =============================================================
+// PowerMill Macro - DiogenixCAM
+// Automação de Features Retangulares
+// Autor: Diogenes Cardoso Ferreira
+// =============================================================
+
+RESET LOCALVARS
+
+// ==============================
+// STEP 1: Create Rectangular Feature
+// ==============================
+REAL $VarLength = INPUT "Enter Length (X)"
+REAL $VarWidth  = INPUT "Enter Width (Y)"
+REAL $VarHeight = INPUT "Enter Height (Z)"
+REAL $VarCornerRadius = INPUT "Enter Corner Radius (mm)"
+
+CREATE FEATUREGROUP
+EXPLORER SELECT FeatureGroup "#" NEW
+ACTIVATE FEATUREGROUP "#" MODE FEATUREEDITOR START
+
+MODE FEATUREEDITOR MODE CREATE RECT_POCKET
+MODE FEATUREEDITOR EDIT NAME "#"
+MODE FEATUREEDITOR EDIT LENGTH $VarLength
+MODE FEATUREEDITOR EDIT WIDTH $VarWidth
+MODE FEATUREEDITOR EDIT HEIGHT $VarHeight
+MODE FEATUREEDITOR EDIT CURVEPOSITION TOP
+MODE FEATUREEDITOR TAB CORNERS
+MODE FEATUREEDITOR EDIT CORNERRADIUS $VarCornerRadius
+
+MODE POSITION START
+MODE POSITION WORKSPACE WORKPLANE
+MODE POSITION PLANE XY
+MODE POSITION CARTESIAN X "0"
+MODE POSITION CARTESIAN Y "0"
+POSITION APPLY
+
+FORM APPLY FEEDIT
+FORM CANCEL FEEDIT
+MODE FEATUREEDITOR FINISH ACCEPT
+
+STRING $FtName = "RectPocket_X" + string($VarLength) + "_Y" + string($VarWidth)
+RENAME FEATUREGROUP "#" $FtName
+
+// ==============================
+// STEP 2: Create Block from Feature
+// ==============================
+FORM BLOCK
+EDIT BLOCK LIMITTYPE FEATURESET
+EDIT BLOCK RESETLIMIT "0"
+EDIT BLOCK RESET
+BLOCK ACCEPT
+ROTATE TRANSFORM TOP
+
+// ==============================
+// STEP 3: User Inputs for Machining
+// ==============================
+STRING LIST $FeatureOptions = {
+    "Feature Area Clearance",
+    "Pocket Area Clearance",
+    "Finish Feature",
+    "Pocket Profile",
+    "Finish Profile"
+}
+
+INT $FeatureOptionSelected = INPUT CHOICE $FeatureOptions "Select Feature Strategy:"
+STRING $VarSelectedTool = INPUT ENTITY TOOL "Select a tool from the list:"
+REAL $VarToolDepth = INPUT "Enter Z Stepdown (Positive Value)"
+REAL $VarStock = INPUT "Enter Stock to Leave per Side (mm)"
+
+// ==============================
+// STEP 4: Select and Run Strategy
+// ==============================
+SWITCH $FeatureOptionSelected
+{
+
+// -------------------------------
+// CASE 0 - Feature Area Clearance
+// -------------------------------
+CASE 0
+    CALL RunStrategy("Feature-Machining/Feature-Area-Clearance.ptf", $FtName, $VarSelectedTool, $VarStock, $VarToolDepth)
+    MESSAGE INFO "Feature Area Clearance Calculated Successfully"
+    BREAK
+
+// -------------------------------
+// CASE 1 - Pocket Area Clearance
+// -------------------------------
+CASE 1
+    CALL RunStrategy("Feature-Machining/Feature-Pocket-Area-Clearance.ptf", $FtName, $VarSelectedTool, $VarStock, $VarToolDepth)
+    MESSAGE INFO "Pocket Area Clearance Calculated Successfully"
+    BREAK
+
+// -------------------------------
+// CASE 2 - Finish Feature
+// -------------------------------
+CASE 2
+    CALL RunStrategy("Feature-Machining/Feature-Finishing.ptf", $FtName, $VarSelectedTool, $VarStock, $VarToolDepth)
+    MESSAGE INFO "Finish Feature Calculated Successfully"
+    BREAK
+
+// -------------------------------
+// CASE 3 - Pocket Profile
+// -------------------------------
+CASE 3
+    CALL RunStrategy("Feature-Machining/Feature-Pocket-Profile.ptf", $FtName, $VarSelectedTool, $VarStock, $VarToolDepth)
+    MESSAGE INFO "Pocket Profile Calculated Successfully"
+    BREAK
+
+// -------------------------------
+// CASE 4 - Finish Profile
+// -------------------------------
+CASE 4
+    CALL RunStrategy("Feature-Machining/Feature-Profile.ptf", $FtName, $VarSelectedTool, $VarStock, $VarToolDepth)
+    MESSAGE INFO "Finish Profile Calculated Successfully"
+    BREAK
+
+DEFAULT
+    MESSAGE WARN "Invalid Strategy Selected."
+}
+
+// ==============================
+// FUNCTION: RunStrategy
+// ==============================
+FUNCTION RunStrategy(STRING $Template, STRING $FeatureName, ENTITY $Tool, REAL $Stock, REAL $Stepdown)
+{
+    FORM STRATEGYSELECTOR
+    STRATEGYSELECTOR STRATEGY $Template NEW
+    IMPORT TEMPLATE ENTITY TOOLPATH TMPLTSELECTORGUI $Template
+
+    ACTIVATE FEATUREGROUP $FeatureName
+    EDIT TPPAGE TOOL
+    ACTIVATE TOOL $Tool
+
+    EDIT PAR 'CutDirection' 'any'
+    EDIT PAR 'Thickness' $Stock
+    EDIT ZHEIGHTS AUTOMATIC STEPDOWN $Stepdown
+    EDIT PAR 'CollisionCheck' '1'
+    EDIT PAR 'ModelGougeCheck' '1'
+
+    EDIT TOOLPATH "1" CALCULATE
+    FORM ACCEPT SFAreaClearance
+
+    STRING $TName = string(Tool.Name) + "_" + get_typename(Toolpath.Strategy)
+    IF entity_exists("toolpath", $TName) {
+        DELETE TOOLPATH $TName
+    }
+    RENAME TOOLPATH ; $TName
+    PRINT = "Toolpath Created: " + $TName
+}

@@ -1,0 +1,22 @@
+// ================================
+//   CREATE PATTERN FROM USER INPUT
+// ================================
+
+RESET LOCALVARS
+
+// --- Ask user for block dimensions ---
+REAL $VarXBlock = INPUT "Enter Block Length (X dimension in mm)"
+REAL $VarYBlock = INPUT "Enter Block Width (Y dimension in mm)"
+
+// --- Calculate coordinates based on center origin ---
+REAL $xMinus = -($VarXBlock / 2)
+REAL $yMinus = -($VarYBlock / 2)
+REAL $xPlus  =  ($VarXBlock / 2)
+REAL $yPlus  =  ($VarYBlock / 2)
+
+CREATE PATTERN ; EDIT PATTERN ; CURVEEDITOR NOGUI START
+CURVEEDITOR MODE RECTANGLE
+MODE COORDINPUT COORDINATES $xMinus $yMinus 0
+MODE COORDINPUT COORDINATES $xPlus $yPlus 0
+CURVEEDITOR FINISH ACCEPT
+

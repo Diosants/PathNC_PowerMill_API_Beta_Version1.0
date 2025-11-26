@@ -1,0 +1,34 @@
+//---------- initialize variables: ---------//
+// -the filepath of the stock model folder  //
+// -a list of all the .stkmd files only     //
+// -the file name prefix                    //
+// -declare empty variable to hold the path //
+//------------------------------------------//
+STRING filePath = "C:/Users/David/Desktop/test"
+STRING LIST $stockFiles = list_files('files', $filePath, '.stkmd')
+STRING fileName = INPUT "Enter File Name"
+STRING stockModelPath = ""
+
+// create a new list for only the 
+// names with the input prefix
+STRING LIST stockNames = {}
+
+// loop through the directory and add 
+// those to the list 
+FOREACH file IN stockFiles {
+	// if the name contains the prefix, add
+	// it to the list
+	IF position(file, fileName) > -1 {
+        	INT $Ok = add_last(stockNames, TOKENS(file, "/")[SIZE(TOKENS(file, "/"))-1])
+	}
+}
+
+// display desired in pulldown list
+INT i = INPUT CHOICE $stockNames "Select Stock File"
+
+// create the file path for the 
+// selected stock model
+$stockModelPath = $filePath + "/" + $stockNames[$i]
+
+// import the stock model
+IMPORT STOCKMODEL $stockModelPath

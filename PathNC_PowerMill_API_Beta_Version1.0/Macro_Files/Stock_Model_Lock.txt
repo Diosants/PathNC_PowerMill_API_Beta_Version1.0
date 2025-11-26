@@ -1,0 +1,12 @@
+GRAPHICS LOCK
+STRING $Selected_NCProgram = INPUT ENTITY NCProgram "Please select a NCPROG"
+STRING $Selected_StkMdl = INPUT ENTITY STOCKMODEL "Please select a Stock Model"
+
+FOREACH item IN components(entity('ncprogram',$Selected_NCProgram)) {
+IF lcase(item.RootType) == 'nctoolpath' {
+//ACTIVATE Toolpath $item.Name
+ACTIVATE StockModel $Selected_StkMdl
+EDIT STOCKMODEL ; INSERT_INPUT TOOLPATH $item.Name LAST
+}
+}
+GRAPHICS UNLOCK

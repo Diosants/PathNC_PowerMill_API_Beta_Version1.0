@@ -1,0 +1,101 @@
+DIALOGS ERROR OFF
+DIALOGS MESSAGE OFF
+
+ENTITY $mdl = $folder('Model')[0]
+
+EDIT FEATURECREATE FILTER HOLES EDIT FEATURECREATE TOPDEFINE ABSOLUTE EDIT FEATURECREATE BOTTOMDEFINE ABSOLUTE
+EDIT FEATURECREATE HOLES COMPOUND OFF
+EDIT FEATURECREATE HOLES FIXED OFF
+EDIT FEATURECREATE MULTAX ON
+EDIT FEATURECREATE HOLES OPEN OFF
+EDIT FEATURECREATE HOLES CAPPED EXCLUDE
+EDIT FEATURECREATE HOLES EDITONAPPLY NO
+
+
+FOREACH $com IN components($mdl.Components) {
+	EDIT MODEL ALL DESELECT ALL
+	EDIT MODEL $mdl SELECT $com.Name
+	
+	ENTITY LIST $featsBefore = folder('Featureset')
+	
+	DEACTIVATE FEATURESET
+	EDIT FEATURECREATE CREATEHOLES
+	
+	ENTITY LIST $featsAfter = folder('Featureset')
+	STRING LIST $featsNew = {}
+	$featsNew = subtract($extract($featsAfter,'Name'),$extract($featsBefore,'Name'))
+	
+	FOREACH $ft IN $featsNew {
+		FOREACH $hol IN components(entity('Featureset',$ft)) {
+
+			REAL $dia = round($hol.Diameter,1)
+			
+			IF $dia < 4 {
+				EDIT MODEL $mdl COLOUR RED 
+			} 
+			
+			IF $dia > 4 AND $dia <= 6 {
+				EDIT MODEL $mdl COLOUR WHITE
+			} 
+			
+			IF $dia > 6 AND $dia <= 10 {
+				EDIT MODEL $mdl COLOUR BLUE
+			} 
+			
+			IF $dia > 10 AND $dia <= 16 {
+				EDIT MODEL $mdl COLOUR GREEN
+			} 
+			
+			IF $dia > 16 AND $dia <= 50 {
+				EDIT MODEL $mdl COLOUR YELLOW
+			}
+			
+			BREAK
+		}
+		DELETE FEATURESET $ft
+		BREAK
+	}
+
+
+//FUNCTION MAIN() { 
+
+
+
+    // Sort active featureset by diameter
+    EDIT FEATURESET $ActiveFeatureset SORT "diameter"
+
+    // Initiate some variables
+    REAL LastFeatDia = 0
+    STRING LastFeatName = ""
+    STRING newfset = ""
+    STRING fsetName = ""
+    STRING ActiveFeat = ""
+
+    // Loop through active featureset creating new featuresets upon encountering a different diameter
+    // If diameter is the same as the last diameter, add to that featureset
+    FOREACH $feat IN components($entity('featureset','')) {
+        EDIT FEATURESET ; DESELECT ALL
+        EDIT FEATURESET ; SELECT $feat.name
+        REAL dia = $feat.Diameter
+        $ActiveFeat = "Featureset\"+$ActiveFeatureset+"\"+$feat.name
+        IF $LastFeatDia == $dia {
+            ACTIVATE Featureset $fsetName
+            EDIT FEATURESET $newfset MOVE_FEATURE ITEM $ActiveFeat AFTER $LastFeatName
+        } ELSE {
+            $newfset = "Featureset\"+$dia+" Holes"
+            $fsetName = $dia+" Holes"
+            $LastFeatName = $feat.name
+            IF ENTITY_EXISTS($entity('featureset', $fsetName)) {
+                $fsetName = NEW_ENTITY_NAME('featureset', $fsetName)
+            }
+            CREATE FEATURESET $fsetName
+            EDIT FEATURESET $newfset MOVE_FEATURE ITEM $ActiveFeat FIRST
+        }
+        $LastFeatDia = $dia
+        ACTIVATE Featureset $ActiveFeatureset
+    }
+
+    // Delete original featureset
+    DELETE FEATURESET $ActiveFeatureset
+}
+}

@@ -1,0 +1,265 @@
+Function Main() 
+{
+
+    // User customisable section ----------------------------------------------
+    // Define 'how flat is flat' in term of a maximum radius. For mm and inch
+    // Example, any surface with a minimum radius > 10000mm will be deemed as flat
+    
+    REAL $mm_Flatness_Radius = 10000
+    REAL $Inch_Flatness_Radius = 400
+    
+    // Define the SET names of each group of surfaces
+    STRING LIST $Set_Names = {'Not_Flat', 'Horizontal_Flats', 'Other_Flats', 'ALL_Flat_Surfaces', 'Vertical'}
+    // ------------------------------------------------------------------------
+    
+
+ 
+    // Remember the name of the currently active workplane
+    STRING $Active_Workplane = ''
+    IF ENTITY_EXISTS($entity('workplane','')) {
+        $Active_Workplane = $entity('workplane','').name
+    }
+     
+    // ------------------------------------------------------------------------
+    // Create a series of new SETS to place the flat and non-flat surfaces onto
+    // ------------------------------------------------------------------------
+
+    // Initialise a new counter variable
+    INT $Counter = 0
+    
+    // Loop through the set names defined at the beginning of the macro
+    FOREACH $SName IN $Set_Names {
+        // If the SET already exists, create a new one with a unique name
+        IF ENTITY_EXISTS($entity('level', $SName)) {
+            ${$Set_Names[$Counter]} = NEW_ENTITY_NAME('level', $SName)
+        }
+        CREATE LEVEL ${$Set_Names[$Counter]} MODELCOMPSET
+        $Counter = $Counter + 1
+    }
+    
+    // Define an integer variable to store the number of selected surfaces
+    INT $No_of_Selected_Surfaces = 0
+    // Define a string variable to inform the user of how many items are on each set
+    STRING $Message = ""
+    STRING $Message_Vertical = ""
+    
+    // -------------------------------------------------------------------------------------------
+    // Start by selecting horizontal and vertical flat surfaces
+    // -------------------------------------------------------------------------------------------
+
+    // Lock the graphics to prevent flashing.
+    GRAPHICS LOCK
+    // Ensure all Levels are drawn
+    DRAW LEVEL ALL
+    // Deselect all surfaces
+    EDIT MODEL ALL DESELECT ALL    
+
+    // Loop through the draft angles for horizontal and vertical surfaces
+    FOREACH $Draft_Angle IN {90, 0} {
+        // Start the 'Select Undercut Components' function
+        EDIT SELECTUNDERCUT MODEL ALL FORM SELECTUNDERCUT
+        
+        // Set the 'draft' angle to 90 and then 0 degrees
+        VIEW MODEL ; UCANGLE $Draft_Angle
+        
+        // Switch on 'Match Draft Angle'
+        EDIT SELECTIONTOOLS MATCH_DRAFT_ANGLE YES
+        
+        // 'Include partially undercut components = OFF
+        EDIT SELECTIONTOOLS INCLUDE_PARTIALS NO
+        
+        // Select the horizontal and vertical flat surfaces
+        FORM APPLY SELECTUNDERCUT
+        FORM ACCEPT SELECTUNDERCUT
+        
+        // Check to see if some surfaces are selected
+        CALL Number_of_Selected_Surfaces($No_of_Selected_Surfaces)
+        // If the number of selected surfaces is greater than zero....
+        IF $No_of_Selected_Surfaces {
+            // Put them onto the Horizontal Flat or Vertical Surface SET
+            IF $Draft_Angle == 90 {
+                // Add these horizontal surfaces to the correct SET
+                EDIT LEVEL $Set_Names[1] ACQUIRE SELECTED
+                // Blank these surfaces
+                BLANK SELECTED
+                $Message = " " + $No_of_Selected_Surfaces + " horizontal flat surfaces" + CRLF
+            } ELSE {
+                // Add these vertical surfaces to the correct SET
+                EDIT LEVEL $Set_Names[4] ACQUIRE SELECTED
+                $Message_Vertical = " " + $No_of_Selected_Surfaces + " vertical surfaces"
+            }
+        } ELSE {
+            IF $Draft_Angle == 90 {
+                // Delete the Horizontal Surfaces SET as there are not any surfaces found
+                DELETE LEVEL $Set_Names[1]
+                $Message = " 0 horizontal flat surfaces"  + CRLF
+
+            } ELSE {
+                // Delete the Vertical Surfaces SET as there are not any surfaces found
+                DELETE LEVEL $Set_Names[4]
+                $Message_Vertical = " 0 vertical surfaces" 
+            }            
+        }
+    }
+
+    // -------------------------------------------------------------------------------------------
+
+
+    
+    // -------------------------------------------------------------------------------------------
+    // Now select all other flat surfaces
+    // -------------------------------------------------------------------------------------------
+
+    // Now find any non flat surfaces along all 6 major axis directions -X, +X, -Y, +Y, -Z, +Z
+
+    // Deselect all surfaces
+    EDIT MODEL ALL DESELECT ALL
+    // Create a new workplane so that we can adjust it to all orthogonal orientations
+    STRING $New_Workplane_Name = NEW_ENTITY_NAME('workplane')
+    CREATE WORKPLANE ;
+    ACTIVATE WORKPLANE #
+    // We could have got the new workplanes name afterwards using:
+    // STRING $New_Workplane_Name = $entity('workplane','').name
+    
+    // Ensure all Levels are drawn
+    DRAW LEVEL ALL
+        
+    // Set the correct units depending upon the projects units
+    REAL $Flatness_Radius = 0
+    IF $powermill.units == 'metric' {
+        $Flatness_Radius = $mm_Flatness_Radius
+    } ELSE {
+        $Flatness_Radius = $Inch_Flatness_Radius
+    }
+    
+    // Create an integer to count the number of non flat surfaces
+    INT $Number_Non_Flat = 0
+    // Align the workplane using the defined Y and Z vectors as well as the origin
+    BOOL $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {0,1,0}, {0,0,1}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+
+    $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {0,1,0}, {0,0,-1}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+        
+    $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {0,1,0}, {1,0,0}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+    
+    $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {0,1,0}, {-1,0,0}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+    
+    $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {1,0,0}, {0,1,0}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+
+    $SetWorkplane = SET_WORKPLANE($entity('workplane',''), {1,0,0}, {0,-1,0}, {0,0,0})
+    // Call a subroutine to select the non-flat (Concave) surfaces
+    CALL Select_Non_Flats($Set_Names[0], $New_Workplane_Name, $Flatness_Radius, $Number_Non_Flat)
+    
+    // Delete the non flat SET if no non-flat surfaces exist
+    IF NOT $Number_Non_Flat {
+        DELETE LEVEL $Set_Names[0]
+    }
+    
+    // Put the remaining flat (Non orthogonal flats) surfaces into their set if some exist.
+    EDIT MODEL ALL SELECT ALL
+    // Check to see if some surfaces are selected
+    CALL Number_of_Selected_Surfaces($No_of_Selected_Surfaces)
+    // If the number of selected surfaces is greater than zero....
+    IF $No_of_Selected_Surfaces {
+        EDIT LEVEL $Set_Names[2] ACQUIRE SELECTED
+    } ELSE {
+        DELETE LEVEL $Set_Names[2]
+    }
+    // Add to the message string the number of other flat surfaces found
+    $Message = $Message + " " + $No_of_Selected_Surfaces + " other flat surfaces" + CRLF + $Message_Vertical
+
+    // Delete the temporary workplane
+    DELETE WORKPLANE $New_Workplane_Name
+
+    // Activate the originally active workplane and set/level
+    IF $Active_Workplane != '' {
+        ACTIVATE WORKPLANE $Active_Workplane
+    }
+
+    // Unblank the surfaces
+    BLANK UNDO
+
+    // Deselect all surfaces
+    EDIT MODEL ALL DESELECT ALL
+
+    // Create a new boolean variable to test if any flat surfaces exist.
+    BOOL $Flats_Exist = 0
+    // Select all horizontal flat surfaces (If some exist)
+    IF ENTITY_EXISTS('level', $Set_Names[1]) {
+        EDIT LEVEL $Set_Names[1] SELECT SURFACE
+        $Flats_Exist = 1
+    }
+    // Select all other flat surfaces (If some exist)
+    IF ENTITY_EXISTS('level', $Set_Names[2]) {    
+        EDIT LEVEL $Set_Names[2] SELECT SURFACE
+        $Flats_Exist = 1
+    }
+    // Add all flat surfaces onto the All Flats SET (If some exist)
+    IF $Flats_Exist {
+        EDIT LEVEL $Set_Names[3] ACQUIRE SELECTED
+    } ELSE {
+        // If there are none, delete this set
+        DELETE LEVEL $Set_Names[3]
+    }
+    
+    // Unlock the graphics
+    GRAPHICS UNLOCK
+    
+    // Tell the user how many surfaces were identified
+    MESSAGE INFO $Message
+}
+
+
+
+// Function to select all non-flat surfaces.
+// 4 Arguments required: 
+// 1) Name of set for non-flat surfaces (STRING)
+// 2) Name of the new, temporary workplane (STRING)
+// 3) The minimum radius used to determine flatness (REAL)
+// 4) How many non-flat surfaces (INT)
+Function Select_Non_Flats(
+    STRING $None_Flat_Set_Name
+    STRING $New_Workplane_Name
+    REAL $Flatness_Radius
+    OUTPUT INT $Number_Non_Flat
+) 
+{
+    // Deactivate and activate the new, temporary workplane
+    DEACTIVATE WORKPLANE
+    ACTIVATE WORKPLANE $New_Workplane_Name
+    // Enter Concave Radius selection
+    EDIT SELECTIONTOOLS MODEL ALL FORM SELECTMINRAD
+    // Set the minimum radius to determine flatness
+    VIEW MODEL ; MINTOOLRAD $Flatness_Radius
+    EDIT SELECTIONTOOLS INCLUDE_PARTIALS YES
+    FORM APPLY SELECTMINRAD
+    FORM ACCEPT SELECTMINRAD
+    // Count how many non-flat surfaces have been found
+    INT $No_of_Selected_Surfaces = 0
+    CALL Number_of_Selected_Surfaces($No_of_Selected_Surfaces)
+    $Number_Non_Flat = $Number_Non_Flat + $No_of_Selected_Surfaces
+    EDIT LEVEL $None_Flat_Set_Name ACQUIRE SELECTED
+    BLANK SELECTED
+}
+
+
+// Function to count the number of selected surfaces in each model
+Function Number_of_Selected_Surfaces(
+    OUTPUT INT $No_of_Selected_Surfs
+) 
+{
+    $No_of_Selected_Surfs = 0
+    FOREACH $Mod IN FOLDER('model') {
+        // Use the NUMBER_SELECTED function to determine how many surfaces are selected
+        $No_of_Selected_Surfs = $No_of_Selected_Surfs + NUMBER_SELECTED($entity('model', $Mod.name).components)
+    }
+}

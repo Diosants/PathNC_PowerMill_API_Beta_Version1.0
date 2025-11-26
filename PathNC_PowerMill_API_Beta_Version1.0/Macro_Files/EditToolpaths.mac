@@ -1,0 +1,25 @@
+RESET LOCALVARS
+
+STRING selectedToolName = INPUT ENTITY TOOL "Please select a tool from the list."
+
+// Now, you can activate the selected tool using its name
+ACTIVATE TOOL $selectedToolName
+
+REAL $VarThickness = INPUT " Enter Thickness"
+REAL $VarRadialStepover = INPUT " Enter Radial Stepover"
+REAL $VarStepdown = INPUT " Enter StepDown"
+//REAL $VarColisionCheck = INPUT " Enable Collision Check (0/1)"
+
+// Edit Tool
+
+EDIT TPPAGE TOOL
+EDIT TPPAGE SWMachineTool
+EDIT TPPAGE TOOL
+ACTIVATE TOOL  $selectedToolName
+
+// Edit Parameters//
+
+EDIT PAR 'Thickness' "$VarThickness"
+EDIT PAR 'RadialDepthOfCut.UserDefined' '1' EDIT PAR 'Stepover' "$VarRadialStepover"
+EDIT ZHEIGHTS AUTOMATIC STEPDOWN "$VarStepdown"
+EDIT PAR 'CollisionCheck' '1'

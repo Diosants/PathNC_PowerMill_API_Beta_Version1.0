@@ -1,0 +1,62 @@
+reset localvars
+
+FUNCTION MAIN () {	
+	// Make your question variables
+	STRING prompt = "Create another workplane?"
+	BOOL b = 0
+	
+	// Create the first workplane
+	CALL CreateWorkplane()
+
+	// Prompt the user to create another
+	$b = QUERY $prompt
+
+	// While the user chooses yes,
+	// keep calling the function
+	WHILE $b {
+		CALL CreateWorkplane()
+		$b = QUERY $prompt
+	} 
+}
+
+
+
+// Workplane creating function
+FUNCTION CreateWorkplane() {
+	// Change the workplane naming scheme
+	EDIT ENTATTRIBUTE TEMPLATE WORKPLANE 'OP'
+
+	// Run your macro
+	DELETE SELECTION
+	FORM BLOCK
+	EDIT BLOCK RESET
+	BLOCK ACCEPT
+	
+	MODE WORKPLANE_CREATE ; INTERACTIVE BLOCK
+
+	MACRO PAUSE "Select point for new Workplane"
+
+	ACTIVATE WORKPLANE #
+	string newWp = entity('workplane','').name
+	
+	MODE WORKPLANE_EDIT START ;
+	MODE WORKPLANE_EDIT SWAP_AXES
+	MACRO PAUSE "Change Direction for new Workplane"
+	MODE WORKPLANE_EDIT FINISH ACCEPT
+	
+	DELETE SELECTION
+	
+	FORM BLOCK
+	EDIT BLOCK COORDINATE NAMED
+	EDIT BLOCK NAMEDWORKPLANE ;
+	EDIT BLOCK TOLERANCE "0.01"
+	EDIT BLOCK RESET
+	BLOCK ACCEPT
+
+	// Reset the naming scheme
+	EDIT ENTATTRIBUTE TEMPLATE WORKPLANE ;
+
+
+}
+
+

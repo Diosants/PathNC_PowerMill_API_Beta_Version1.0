@@ -1,0 +1,87 @@
+STRING LIST yourworkplanenames = {"G54","G55","G56","G57","G58","G59"}
+
+FOREACH wpname IN yourworkplanenames {
+  IF ENTITY_EXISTS('workplane', $wpname) {
+//Do Nothing
+	} ELSE {
+		GRAPHICS LOCK
+      // 	CREATE WORKPLANE AT G54
+MODE WORKPLANE_CREATE "G54" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -6.0493 -14.5758 0
+	
+		// CREATE WORKPLANE AT G55
+MODE WORKPLANE_CREATE "G55" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -6.0493 -6.7024 0
+ //CREATE WORKPLANE AT G56
+MODE WORKPLANE_CREATE "G56" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -15.8944 -14.5758 0
+
+//CREATE WORKPLANE AT G57
+MODE WORKPLANE_CREATE "G57" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -15.8944 -6.7024 0
+
+//CREATE WORKPLANE AT G58
+MODE WORKPLANE_CREATE "G58" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -25.3346 -12.3245 0
+
+//CREATE WORKPLANE AT G59
+MODE WORKPLANE_CREATE "G59" INTERACTIVE POINT
+MODE COORDINPUT COORDINATES -25.3346 -7.4026 0
+
+UNDRAW WORKPLANE ALL
+
+GRAPHICS UNLOCK
+    }
+}
+
+// ENTITY LIST
+ENTITY LIST $Model = INPUT ENTITY MODEL "Select Which Model To Copy To Fixture Offset"
+
+STRING $Newmodel = new_entity_name('model')
+STRING $folderFull = "Model\" + $Model.Name
+
+// Allow selection of multiple workplanes
+ENTITY LIST $wpNames = INPUT ENTITY MULTIPLE WORKPLANE "Select The Fixture Offsets To Move The Model To"
+
+FOREACH wp IN $wpNames {
+  // Activate current workplane
+  ACTIVATE WORKPLANE ${wp.Name}
+
+  // Store workplane name for later use
+  STRING $currentWpName = $wp.Name
+
+
+  IF NOT folder_exists($folderFull) {
+    CREATE FOLDER "Model" $Model.Name
+  }
+  ACTIVATE FOLDER $folderFull
+
+  EDIT MODEL $Model.Name CLIPBOARD COPY
+  CREATE MODEL CLIPBOARD
+  TRANSFORM TYPE WORKPLANE TRANSFORM MODEL $Newmodel
+  DEACTIVATE WORKPLANE
+
+  // Unique naming based on model and workplane
+  STRING $newName = $Model.Name + "_" + $currentWpName
+  INT $i = 1
+  WHILE ENTITY_EXISTS('model', $newName) {
+    $newName = $newName + "_" + $i
+    $i = $i + 1
+  }
+  RENAME MODEL $Newmodel $newName
+
+  EDIT MODEL $newName SELECT ALL
+
+  // Check if "Moved" level exists
+ IF NOT ENTITY_EXISTS('level',"Moved Models to Fixture Offset") {
+   CREATE LEVEL "Moved Models to Fixture Offset" Level
+}
+}
+EDIT LEVEL "Moved Models to Fixture Offset" ACQUIRE SELECTED
+EDIT MODEL ALL DESELECT ALL
+
+DEACTIVATE FOLDER $folderFull
+
+QUIT
+DEACTIVATE WORKPLANE $wpName
+QUIT

@@ -1,0 +1,37 @@
+// creates  the block
+
+REAL $VarXlen = IMPUT "what is the length of the material(x)?"
+REAL $VarYlen = IMPUT "what is the width of the material(y)?"
+REAL $VarZlen = IMPUT "what is the heigh of the material(z)?"
+
+EDIT MODEL  ALL SELECT ALL
+FORM BLOCK
+EDIT BLOCK COORDINATE WORLD
+EDIT BLOCK XLEN $VarXlen
+EDIT BLOCK YLEN $VarYlen
+EDIT BLOCK Z MIN LOCK
+EDIT BLOCK ZLEN $VarZlen
+
+EDIT BLOCK RESET
+EDIT BLOCK DRAWMODE 0
+BLOCK ACCEPT
+EDIT MODEL ALL DESELECT ALL
+
+// creates  the work plane
+
+ MACRO  PAUSE "create the workplane"
+RENAME workplane # "G54"
+ACTIVATE WORKPLANE "G54"
+
+// create  the safety plane//
+
+REAL $VarRapid = IMPUT " Enter the rapid height"
+
+EDIT TOOLPATH SAFEAREA SIZE $VarRapid
+
+EDIT TOOLPATH LEADS RAISEFORM
+EDIT TOOLPATH SAFEAREA SIZE $VarRapid
+// EDIT TOOLPATH SAFEAREA CALCULATE DIMENSIONS
+EDIT TOOLPATH SAFEAREA DRAWABLE RAPID ON
+EDIT TOOLPATH SAFEAREA DRAWABLE RAPID OPACITY 0
+LEADS ACCEPT
